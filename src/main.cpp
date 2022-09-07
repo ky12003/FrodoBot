@@ -22,6 +22,7 @@ void usercontrol()
   {
   arcadeDrive();
   //tankDrive();
+  // if needed, switch between the two drive modes here
   }
 }
 
