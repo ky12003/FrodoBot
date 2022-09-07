@@ -8,7 +8,7 @@ brain Brain;
 controller controller1(primary);
 
 //drivetrain motors
-motor left1(PORT11,ratio18_1, true);
+motor left1(PORT14,ratio18_1, true);
 motor left2(PORT12,ratio18_1, true);
 motor left3(PORT13,ratio18_1, true);
 
