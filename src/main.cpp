@@ -20,8 +20,8 @@ void usercontrol()
 {
   while(1)
   {
-  arcadeDrive();
-  //tankDrive();
+  //arcadeDrive();
+  tankDrive();
   // if needed, switch between the two drive modes here
   }
 }

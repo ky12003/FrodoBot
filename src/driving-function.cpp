@@ -22,7 +22,7 @@ void arcadeDrive()
 
 void tankDrive()
 {
-  if (abs(controller1.Axis2.value()) > 5 && abs(controller1.Axis3.value()) > 5)
+  if (abs(controller1.Axis2.value()) > 5 || abs(controller1.Axis3.value()) > 5)
   {
     AllLeft.spin(forward, controller1.Axis3.value(), pct);
     AllRight.spin(forward, controller1.Axis2.value(), pct); 
