@@ -9,6 +9,10 @@ void arcadeDrive()
     AllRight.spin(forward, (controller1.Axis3.value() + controller1.Axis1.value() ), pct);
     AllLeft.spin(forward, (controller1.Axis3.value() - controller1.Axis1.value() ), pct);
   }
+
+  // arcade drive function, 
+  //Axis 3 on controller controls foward and reverse. 
+  //Axis 1 on controllers controls left and right turns
   else
   {
     AllRight.stop();
