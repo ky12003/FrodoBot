@@ -6,8 +6,8 @@ void arcadeDrive()
 {
   if (abs(controller1.Axis3.value()) > 5 || abs(controller1.Axis1.value()) > 5)
   {
-    AllLeft.spin(forward, (controller1.Axis3.value() + controller1.Axis1.value() ), pct);
-    AllRight.spin(forward, (controller1.Axis3.value() - controller1.Axis1.value() ), pct);
+    AllRight.spin(forward, (controller1.Axis3.value() + controller1.Axis1.value() ), pct);
+    AllLeft.spin(forward, (controller1.Axis3.value() - controller1.Axis1.value() ), pct);
   }
   else
   {
