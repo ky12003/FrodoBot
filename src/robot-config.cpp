@@ -18,6 +18,12 @@ motor right3(PORT3,ratio18_1,false);
 
 motor_group AllLeft(left1, left2, left3);
 motor_group AllRight(right1, right2, right3);
+motor_group AllMotors(left1, left2, left3, right1, right2, right3);
+
+encoder encoderTop = encoder(Brain.ThreeWirePort.A);
+encoder encoderBottom = encoder(Brain.ThreeWirePort.B);
+//since the encoder has two wires, it needs to be defined by two ports//
+
 
 /**
  * Used to initialize code/tasks/devices added using tools in VEXcode Pro.

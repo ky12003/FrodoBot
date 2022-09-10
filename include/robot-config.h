@@ -15,7 +15,10 @@ extern motor right3;
 
 extern motor_group AllLeft;
 extern motor_group AllRight;
+extern motor_group AllMotors;
 
+extern encoder encoder1;
+extern encoder encoder2;
 /**
  * Used to initialize code/tasks/devices added using tools in VEXcode Pro.
  *

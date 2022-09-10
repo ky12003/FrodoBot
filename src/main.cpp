@@ -12,6 +12,7 @@
 
 #include "vex.h"
 #include "driving-function.h"
+#include "routines.h"
 using namespace vex;
 
 competition Competition;
@@ -28,7 +29,7 @@ void usercontrol()
   
 void Autonomous()
 {
- //placeholder for the code that does not exist yet :^)
+  moveinBox();
 }
 
 int main() {

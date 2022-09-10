@@ -2,8 +2,8 @@
 #define AUTONOMOUS
 
 void SetTimeout(int);
-void moveForward(int, int, int);
-void TurninPlace(int, int, int);
+void moveForward(int dist, int speed, int seconds); //(int dist, int speed, int timeout(seconds))//
+void TurninPlace(int dist, int speed, int seconds); //(int dist, int speed, int timeout(seconds))//
 
 
 
