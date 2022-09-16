@@ -11,7 +11,10 @@ extern motor left3;
 
 extern motor right1;
 extern motor right2;
-extern motor right3;
+extern motor right3; 
+
+//intake motors
+extern motor intake;
 
 extern motor_group AllLeft;
 extern motor_group AllRight;

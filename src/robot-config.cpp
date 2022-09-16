@@ -1,5 +1,5 @@
 #include "vex.h"
-
+#include "robot-config.h"
 using namespace vex;
 
 // A global instance of brain used for printing to the V5 brain screen
@@ -16,6 +16,10 @@ motor right1(PORT1,ratio18_1, false);
 motor right2(PORT2,ratio18_1, false);
 motor right3(PORT3,ratio18_1,false);
 
+//intake motor 
+motor intake(PORT19,ratio18_1,false);
+
+//motor groups 
 motor_group AllLeft(left1, left2, left3);
 motor_group AllRight(right1, right2, right3);
 motor_group AllMotors(left1, left2, left3, right1, right2, right3);

@@ -3,5 +3,6 @@
 
 void arcadeDrive();
 void tankDrive();
+void Intake();
 
 #endif 

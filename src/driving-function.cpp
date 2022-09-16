@@ -1,5 +1,6 @@
 #include "driving-function.h"
 #include "vex.h"
+#include "robot-config.h"
 using namespace vex;
 
 void arcadeDrive()
@@ -31,5 +32,16 @@ void tankDrive()
   {
     AllRight.stop();
     AllLeft.stop();
-  }  
+  } 
 }
+void Intake()
+  {
+    if (controller1.ButtonR2.pressing())
+    {
+      intake.spin(reverse);
+    }
+    else
+    {
+      intake.stop(); //this is a test function for now
+    }
+  }
