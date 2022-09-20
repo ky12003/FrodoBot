@@ -19,11 +19,35 @@ competition Competition;
 
 void usercontrol()
 {
+  bool Toggle = false;
+  bool ToggleSwitch = false;
   while(1)
   {
   //arcadeDrive();
+  //
   tankDrive();
-  Intake();
+
+  if (controller1.ButtonR1.pressing())
+  {
+    if (!ToggleSwitch)
+    {
+      ToggleSwitch = true;
+      Toggle = !Toggle;
+      if (Toggle)
+      {
+        intake.spin(reverse);
+      }
+      else 
+      {
+        intake.stop();
+      }
+    }
+  }
+  else 
+  {
+    ToggleSwitch = false;
+  }
+  //Intake();
   // if needed, switch between the two drive modes here
   }
 }
