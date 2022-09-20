@@ -27,7 +27,7 @@ void usercontrol()
   //
   tankDrive();
 
-  if (controller1.ButtonR1.pressing())
+  if (controller1.ButtonR2.pressing())
   {
     if (!ToggleSwitch)
     {
@@ -35,7 +35,7 @@ void usercontrol()
       Toggle = !Toggle;
       if (Toggle)
       {
-        intake.spin(reverse);
+        intake.spin(reverse,100,pct);
       }
       else 
       {
