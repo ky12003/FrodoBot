@@ -34,14 +34,51 @@ void tankDrive()
     AllLeft.stop();
   } 
 }
+
 void Intake()
   {
-    if (controller1.ButtonR2.pressing())
+    bool Toggle = false;
+    bool ToggleSwitch = false;
+    if (controller1.ButtonR1.pressing())
+  {
+    if (!ToggleSwitch)
     {
-      intake.spin(reverse);
-    }
-    else
-    {
-      intake.stop(); //this is a test function for now
+      ToggleSwitch = true;
+      Toggle = !Toggle;
+      if (Toggle)
+      {
+        intake.spin(reverse);
+      }
+      else 
+      {
+        intake.stop();
+      }
     }
   }
+  else 
+  {
+    ToggleSwitch = false;
+  }
+}
+
+void Catapult()
+{
+  bool CatapultToggle = false;
+  bool CatapultSwitch = false;
+  if (controller1.ButtonX.pressing())
+  {
+    if (!CatapultSwitch)
+    {
+      CatapultToggle = true;
+      CatapultToggle = !CatapultToggle;
+      if (CatapultToggle)
+      {
+        thrower.spinFor(forward, 1.5, seconds);
+      }
+      else 
+      {
+        thrower.stop();
+      }
+    }
+  }
+}

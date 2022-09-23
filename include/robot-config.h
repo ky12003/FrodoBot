@@ -16,10 +16,15 @@ extern motor right3;
 //intake motors
 extern motor intake;
 
+//catapult motor
+extern motor thrower;
+
+//motor groups
 extern motor_group AllLeft;
 extern motor_group AllRight;
 extern motor_group AllMotors;
 
+//motor encoders
 extern encoder encoder1;
 extern encoder encoder2;
 /**

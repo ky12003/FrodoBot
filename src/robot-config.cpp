@@ -17,7 +17,10 @@ motor right2(PORT2,ratio18_1, false);
 motor right3(PORT3,ratio18_1,false);
 
 //intake motor 
-motor intake(PORT19,ratio18_1,false);
+motor intake(PORT19,ratio6_1,false);
+
+//catapult motor
+motor thrower(PORT15,ratio18_1,false);
 
 //motor groups 
 motor_group AllLeft(left1, left2, left3);
