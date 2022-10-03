@@ -25,3 +25,23 @@ void TurninPlace(int dist, int speed, int timeout) //a postitve number will turn
   SetTimeout(0);
 
 }
+
+void IntakeAuto(int timeout)
+{
+  SetTimeout(timeout);
+  intake.spin(reverse,100,pct);
+  SetTimeout(0);
+  intake.stop();
+}
+
+void IntakeSpitAuto(int dist, int speed, int timeout)
+{
+  SetTimeout(timeout);
+  intake.spinFor(forward, double (dist), rev, double (speed), rpm, false);
+  SetTimeout(0);
+}
+
+void catalimit()
+{
+  
+}

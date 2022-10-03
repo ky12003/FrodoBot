@@ -27,6 +27,7 @@ extern motor_group AllMotors;
 //motor encoders
 extern encoder encoder1;
 extern encoder encoder2;
+extern encoder cataswitch;
 /**
  * Used to initialize code/tasks/devices added using tools in VEXcode Pro.
  *

@@ -7,7 +7,7 @@ brain Brain;
 
 controller controller1(primary);
 
-//drivetrain motors
+//drivetrain motors (all green motors)
 motor left1(PORT14,ratio18_1, true);
 motor left2(PORT12,ratio18_1, true);
 motor left3(PORT13,ratio18_1, true);
@@ -16,20 +16,22 @@ motor right1(PORT1,ratio18_1, false);
 motor right2(PORT2,ratio18_1, false);
 motor right3(PORT3,ratio18_1,false);
 
-//intake motor 
+//intake motor (blue motor)
 motor intake(PORT19,ratio6_1,false);
 
-//catapult motor
-motor thrower(PORT15,ratio18_1,false);
+//catapult motor (red motor)
+motor thrower(PORT18,ratio36_1,false);
 
 //motor groups 
 motor_group AllLeft(left1, left2, left3);
 motor_group AllRight(right1, right2, right3);
 motor_group AllMotors(left1, left2, left3, right1, right2, right3);
 
+//since the encoder has two wires, it needs to be defined by two ports
 encoder encoderTop = encoder(Brain.ThreeWirePort.A);
 encoder encoderBottom = encoder(Brain.ThreeWirePort.B);
-//since the encoder has two wires, it needs to be defined by two ports//
+encoder cataswitch = encoder(Brain.ThreeWirePort.H);
+
 
 
 /**

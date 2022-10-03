@@ -6,18 +6,12 @@ using namespace vex;
 void moveinBox()
 {
   ////
-  // 
+  //a postitve number will turn right, a negative number will turn left//
   //// 
-  moveForward(60,60,10);
+  TurninPlace(25, 80, 1);
   wait(1000, msec);
-  TurninPlace(-19,60,1);
+  moveForward(140, 80, 10);
   wait(1000, msec);
-  TurninPlace(-19,60,1);
+  IntakeSpitAuto(20,600,10);
   wait(1000, msec);
-  moveForward(60,60,10);
-  wait(1000, msec);
-  TurninPlace(19,60,1);
-  wait(1000, msec);
-  moveForward(60,60,10);
-
 }
