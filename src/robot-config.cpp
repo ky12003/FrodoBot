@@ -8,13 +8,14 @@ brain Brain;
 controller controller1(primary);
 
 //drivetrain motors (all green motors)
-motor left1(PORT14,ratio18_1, true);
-motor left2(PORT12,ratio18_1, true);
-motor left3(PORT13,ratio18_1, true);
+motor left1(PORT3,ratio36_1, true);
+motor left2(PORT4,ratio36_1, true);
+motor left3(PORT5,ratio36_1, true);
 
-motor right1(PORT1,ratio18_1, false);
-motor right2(PORT2,ratio18_1, false);
-motor right3(PORT3,ratio18_1,false);
+motor right1(PORT6,ratio36_1, false);
+motor right2(PORT7,ratio36_1, false);
+motor right3(PORT8,ratio36_1,false);
+
 
 //intake motor (blue motor)
 motor intake(PORT19,ratio6_1,false);
