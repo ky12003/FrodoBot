@@ -7,8 +7,8 @@ void arcadeDrive()
 {
   if (abs(controller1.Axis3.value()) > 5 || abs(controller1.Axis1.value()) > 5)
   {
-    AllRight.spin(forward, (controller1.Axis3.value() + controller1.Axis1.value() ), pct);
-    AllLeft.spin(forward, (controller1.Axis3.value() - controller1.Axis1.value() ), pct);
+    AllRight.spin(forward, (controller1.Axis3.value() + controller1.Axis1.value()) * 80, pct);
+    AllLeft.spin(forward, (controller1.Axis3.value() - controller1.Axis1.value()) * 80, pct);
   }
 
   // arcade drive function, 
@@ -25,8 +25,8 @@ void tankDrive()
 {
   if (abs(controller1.Axis2.value()) > 5 || abs(controller1.Axis3.value()) > 5)
   {
-    AllRight.spin(forward, controller1.Axis3.value(), pct);
-    AllLeft.spin(forward, controller1.Axis2.value(), pct); 
+    AllRight.spin(forward, (controller1.Axis3.value()) * 80, pct);
+    AllLeft.spin(forward, (controller1.Axis2.value()) * 80, pct); 
   }
   else
   {
@@ -44,5 +44,46 @@ void Catapult()
   else
   {
     thrower.stop();
+  }
+}
+
+bool Toggle = false;
+bool ToggleSwitch = false;
+void intakeToggle() {
+  if (controller1.ButtonR2.pressing())
+  {
+    if (!ToggleSwitch)
+    {
+      ToggleSwitch = true;
+      Toggle = !Toggle;
+      if (Toggle)
+      {
+        intake.spin(reverse,100,pct);
+      }
+      else 
+      {
+        intake.stop();
+      }
+    }
+  }
+  if (controller1.ButtonR1.pressing())
+  {
+    if (!ToggleSwitch)
+    {
+      ToggleSwitch = true;
+      Toggle = !Toggle;
+      if (Toggle)
+      {
+        intake.spin(forward,100,pct);
+      }
+      else 
+      {
+        intake.stop();
+      }
+    }
+  }
+  else 
+  {
+    ToggleSwitch = false;
   }
 }

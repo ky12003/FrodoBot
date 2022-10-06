@@ -19,48 +19,11 @@ competition Competition;
 
 void usercontrol()
 {
-  bool Toggle = false;
-  bool ToggleSwitch = false;
   while(1)
   {
     Catapult();
     tankDrive();
-  if (controller1.ButtonR2.pressing())
-  {
-    if (!ToggleSwitch)
-    {
-      ToggleSwitch = true;
-      Toggle = !Toggle;
-      if (Toggle)
-      {
-        intake.spin(reverse,100,pct);
-      }
-      else 
-      {
-        intake.stop();
-      }
-    }
-  }
-  if (controller1.ButtonR1.pressing())
-  {
-    if (!ToggleSwitch)
-    {
-      ToggleSwitch = true;
-      Toggle = !Toggle;
-      if (Toggle)
-      {
-        intake.spin(forward,100,pct);
-      }
-      else 
-      {
-        intake.stop();
-      }
-    }
-  }
-  else 
-  {
-    ToggleSwitch = false;
-  }
+    intakeToggle();
   }
 }
 void Autonomous()

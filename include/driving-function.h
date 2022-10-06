@@ -6,6 +6,8 @@
 void arcadeDrive();
 void tankDrive();
 
+void intakeToggle();
+
 //function for intake to eat disks
 void Intake();
 
