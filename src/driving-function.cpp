@@ -35,15 +35,25 @@ void tankDrive()
   } 
 }
 
+bool catapultDown = true;
 void Catapult()
 {
   if (controller1.ButtonL1.pressing())
   {
-   thrower.spin(forward, 100, pct);
+    thrower.spin(reverse, 100, pct);
+    catapultDown = false;
   }
   else
   {
-    thrower.stop();
+    if (catapultDown == true) {
+      thrower.stop();
+    } else {
+      thrower.spin(forward, 100, pct);
+      if (thrower.velocity(pct) < 0.5) {
+        catapultDown = true;
+      }
+    }
+    
   }
 }
 
