@@ -18,7 +18,7 @@ motor right3(PORT8,ratio6_1, true);
 
 
 //intake motor (green motor)
-motor intake(PORT16,ratio18_1,false);
+motor intake(PORT16,ratio18_1,true);
 
 //catapult motor (red motor)
 motor thrower(PORT9,ratio36_1,false);
