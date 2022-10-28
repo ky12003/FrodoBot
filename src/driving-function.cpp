@@ -57,43 +57,47 @@ void Catapult()
   }
 }
 
-bool Toggle = false;
-bool ToggleSwitch = false;
-void intakeToggle() {
-  if (controller1.ButtonR2.pressing())
+//intake wheel control
+bool doIntakeOut = false;
+bool doIntakeIn = false;
+bool intakeToggleBuffering = false;
+void intakeToggle(){
+  if(controller1.ButtonR1.pressing())
   {
-    if (!ToggleSwitch)
-    {
-      ToggleSwitch = true;
-      Toggle = !Toggle;
-      if (Toggle)
-      {
-        intake.spin(reverse,100,pct);
+    if (!intakeToggleBuffering) {
+      
+      intakeToggleBuffering = true;
+      doIntakeOut = !doIntakeOut;
+      doIntakeIn = false;
+      if (doIntakeOut) {
+        controller1.rumble("-");
+      } else {
+        controller1.rumble("..");
       }
-      else 
-      {
-        intake.stop();
+    }
+  } 
+  else if (controller1.ButtonR2.pressing()) {
+    if (!intakeToggleBuffering) {
+      intakeToggleBuffering = true;
+      doIntakeIn = !doIntakeIn;
+      doIntakeOut = false;
+      if (doIntakeIn) {
+        controller1.rumble(".");
+      } else {
+        controller1.rumble("..");
       }
     }
   }
-  if (controller1.ButtonR1.pressing())
-  {
-    if (!ToggleSwitch)
-    {
-      ToggleSwitch = true;
-      Toggle = !Toggle;
-      if (Toggle)
-      {
-        intake.spin(forward,100,pct);
-      }
-      else 
-      {
-        intake.stop();
-      }
-    }
+  else {
+    // controller1.rumble(".");
+    intakeToggleBuffering = false;
   }
-  else 
-  {
-    ToggleSwitch = false;
+
+  if (doIntakeOut) {
+    intake.spin(fwd, 100, pct);
+  } else if (doIntakeIn) {
+    intake.spin(directionType::rev, 100, pct);
+  } else {
+    intake.stop();
   }
 }

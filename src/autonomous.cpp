@@ -2,6 +2,9 @@
 #include "autonomous.h"
 using namespace vex;
 
+/*----------
+MOVEMENT
+----------*/
 void SetTimeout(int seconds)
 {
   AllLeft.setTimeout(seconds, sec);
@@ -44,4 +47,39 @@ void IntakeSpitAuto(int dist, int speed, int timeout)
 void catalimit()
 {
   
+}
+
+void moveForwardPID(int speed) {
+
+  int encPositionLeft;
+  int encPositionRight;
+  int error =0;
+  int modifiedError;
+  float kp = 0.1;
+
+  AllLeft.resetPosition();
+  AllRight.resetPosition();
+  // double errorPositionLeft = targetPosition- encPositionLeft;
+  // double errorPositionRight = targetPosition - encPositionRight;
+  while (true) {
+    
+    encPositionLeft = AllLeft.position(deg);
+    encPositionRight = AllRight.position(deg);
+    error = encPositionLeft - encPositionRight;
+    modifiedError = int (kp*error);
+    printf("%d %d \n", encPositionLeft, encPositionRight);
+    wait(50,msec);
+
+if (error > 100) {
+  error = 100;
+}
+else if(error < -100){
+  error = -100;
+}
+    AllLeft.spin(forward, speed - modifiedError, pct);
+    AllRight.spin(forward, speed + modifiedError, pct);
+  }
+
+  // if ((abs(errorPositionLeft) > 5) || (abs(errorPositionRight) > 5)) {
+  // }
 }
