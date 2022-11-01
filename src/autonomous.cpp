@@ -44,10 +44,20 @@ void IntakeSpitAuto(int dist, int speed, int timeout)
   SetTimeout(0);
 }
 
-void catalimit()
-{
-  
-}
+// void catapultLogic() {
+// controller1.ButtonL2.pressed(windUp);
+// catapultBumper.pressed(windBack);
+// controller1.ButtonR2.pressed(intakeOn);
+// }
+
+// void windBack() {
+//   catapult.stop();
+
+// }
+
+// void windUp() {
+//   catapult.spin(forward);
+// }
 
 void moveForwardPID(int speed) {
 

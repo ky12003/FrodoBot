@@ -12,11 +12,15 @@ void intakeToggle();
 void Intake();
 
 //function for catapult to throw disks
-void Catapult();
+void catapultLogic();
+
+// helper functions for catapult
+void windBack();
+void windUp();
 
 //function for roller to spin rollers
 void Roller();
-
+void Catapult();
 
 
 #endif 

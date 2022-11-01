@@ -7,7 +7,7 @@ void TurninPlace(int dist, int speed, int seconds); //(int dist, int speed, int 
 void IntakeSpitAuto(int dist, int speed, int timeout);
 void IntakeAuto(int dist, int speed, int timeout);
 void catalimit(int dist, int speed, int timeout);
-
+void moveForwardPID(int speed);
 
 
 #endif 
