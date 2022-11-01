@@ -7,7 +7,7 @@ brain Brain;
 
 controller controller1(primary);
 
-//drivetrain motors (all green motors)
+//drivetrain motors (all blue motors)
 motor left1(PORT3,ratio6_1, false);
 motor left2(PORT4,ratio6_1, false);
 motor left3(PORT5,ratio6_1, false);
