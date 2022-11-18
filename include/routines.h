@@ -2,7 +2,7 @@
 #define ROUTINES
 
 void moveinBox();
-
+void spinRoller();
 
 
 

@@ -15,3 +15,7 @@ void moveinBox()
   IntakeSpitAuto(20,600,10);
   wait(1000, msec);
 }
+
+void spinRoller() {
+IntakeSpitAuto(100,20,3);
+}

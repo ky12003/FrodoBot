@@ -13,6 +13,7 @@
 #include "vex.h"
 #include "driving-function.h"
 #include "routines.h"
+#include "RobotFunctions.h"
 using namespace vex;
 
 competition Competition;
@@ -21,8 +22,8 @@ void usercontrol()
 {
   while(1)
   {
-    Catapult();
     tankDrive();
+    Catapult();
     intakeToggle();
   }
 }

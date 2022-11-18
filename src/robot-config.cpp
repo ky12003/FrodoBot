@@ -17,7 +17,7 @@ motor right2(PORT7,ratio6_1, true);
 motor right3(PORT8,ratio6_1, true);
 
 
-//intake motor (green motor)
+//intake motor (green motor) also serves as our roller
 motor intake(PORT16,ratio18_1,true);
 
 //catapult motor (red motor)
