@@ -18,24 +18,29 @@ void Routine1Auton() {
   TurninPlace(90, 15, 4000); // turn clockwise towards the basket
   wait(800, msec);
   moveForward(105, 30, 3000); // go towards the basket to shoot
-  controller1.rumble("."); // TEMP NOTICE FOR SHOOTING DISKS
-  // ShootCatapultAuto(1500); // shoot the preload disks into low goal
+  ShootCatapultAuto(4000); // shoot the preload disks into low goal
+  wait(1000, msec);
+  TurninPlace(90, 15, 4000); // turn clockwise for additional preloads
+  wait(800, msec);
+  moveForward(35, 10, 5000); // move forwards towards loading zone
+  wait(800, msec);
+ 
 
   // *PRELOAD/LOW GOAL PROCEDURE X3
-  for (int i = 0; i < 3; i++) {
-    wait(1000, msec);
-    TurninPlace(90, 15, 4000); // turn clockwise for additional preloads
-    wait(800, msec);
-    moveForward(35 + (i*5.5), 10, 5000); // move forwards towards loading zone
-    wait(2500, msec);
-    moveForward(-25, 10, 3000); // move backwards away from the loading zone
-    wait(800, msec);
-    TurninPlace(-90, 15, 4000); // turn counterclockwise towards goal
-    controller1.rumble("."); // TEMP NOTICE FOR SHOOTING DISKS
-    // ShootCatapultAuto(1500) // shoot in low goal
-    wait(800, msec);
-    moveForward(-8, 10, 1000); // move slightly backwards to reposition
-  }
+  // for (int i = 0; i < 3; i++) {
+  //   wait(1000, msec);
+  //   TurninPlace(90, 15, 4000); // turn clockwise for additional preloads
+  //   wait(800, msec);
+  //   moveForward(35 + (i*5.5), 10, 5000); // move forwards towards loading zone
+  //   wait(2500, msec);
+  //   moveForward(-25, 10, 3000); // move backwards away from the loading zone
+  //   wait(800, msec);
+  //   TurninPlace(-90, 15, 4000); // turn counterclockwise towards goal
+  //   controller1.rumble("."); // TEMP NOTICE FOR SHOOTING DISKS
+  //   // ShootCatapultAuto(1500) // shoot in low goal
+  //   wait(800, msec);
+  //   moveForward(-8, 10, 1000); // move slightly backwards to reposition
+  // }
   
 }
 

@@ -7,11 +7,9 @@ using namespace vex;
 bool catapultDown = true;
 void Catapult()
 {
-  
-  printf("\ntest: %i", catapultDown);
   if (controller1.ButtonL1.pressing())
   {
-    thrower.spin(reverse, 100, pct);
+    thrower.spin(reverse, 100, pct); // keep reversing the intake (it will launch automatically when it gets to the bottom)
     catapultDown = false;
   }
   else
@@ -19,7 +17,7 @@ void Catapult()
     if (catapultDown == true) {
       thrower.stop();
     } else {
-      thrower.spin(forward, 100, pct);
+      thrower.spin(forward, 100, pct); // buffer
       if (thrower.velocity(pct) < 0.5) {
         catapultDown = true;
       }
@@ -28,14 +26,14 @@ void Catapult()
   }
 }
 
-void windBack() {
-  thrower.stop();
+// void windBack() {
+//   thrower.stop();
 
-}
+// }
 
-void windUp() {
-  thrower.spin(forward);
-}
+// void windUp() {
+//   thrower.spin(forward);
+// }
 
 //intake wheel control
 bool doIntakeOut = false;
