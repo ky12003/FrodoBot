@@ -5,9 +5,10 @@ using namespace vex;
 
 
 bool catapultDown = true;
-
 void Catapult()
 {
+  
+  printf("\ntest: %i", catapultDown);
   if (controller1.ButtonL1.pressing())
   {
     thrower.spin(reverse, 100, pct);

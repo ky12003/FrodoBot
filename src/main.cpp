@@ -29,7 +29,10 @@ void usercontrol()
 }
 void Autonomous()
 {
-  moveinBox();
+
+  Routine1Auton();
+  // GPStest();
+  // moveinBox();
 }
 
 int main() {

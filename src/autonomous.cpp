@@ -5,26 +5,34 @@ using namespace vex;
 /*----------
 MOVEMENT
 ----------*/
-void SetTimeout(int seconds)
+void SetTimeout(int mSec)
 {
-  AllLeft.setTimeout(seconds, sec);
-  AllRight.setTimeout(seconds, sec);
+  AllLeft.setTimeout(mSec, msec);
+  AllRight.setTimeout(mSec, msec);
 }
 
-void moveForward(int dist, int speed, int timeout)
+void moveForward(float distanceCM, int speedPct, int timeout)
 {
   SetTimeout(timeout);
-  AllLeft.spinFor(forward, double (dist/(10.16*M_PI)), rev, double (speed), rpm, false);
-  AllRight.spinFor(forward, double (dist/(10.16*M_PI)), rev, double (speed), rpm, true);
+  AllLeft.setVelocity(speedPct, pct);
+  AllRight.setVelocity(speedPct, pct);
+  // (GEAR RATIO IS ONE-TO-ONE, so the "distance" would be times 1)
+  // AllRight.rotateFor(forward, (distanceCM/WHEEL_CIRCUMFERENCE) * DRIVE_GEAR_RATIO, rev, false);
+  AllMotors.rotateFor(forward, (distanceCM/WHEEL_CIRCUMFERENCE) * DRIVE_GEAR_RATIO, rev, true);
   SetTimeout(0);
 
 }
 
-void TurninPlace(int dist, int speed, int timeout) //a postitve number will turn right, a negative number will turn left//
+void TurninPlace(int turnDegree, int speedPct, int timeout) //a postitve number will turn right, a negative number will turn left//
 {
   SetTimeout(timeout);
-  AllLeft.spinFor(reverse, double (dist/(10.16*M_PI)), rev, double (speed), rpm, false);
-  AllRight.spinFor(forward, double (dist/(10.16*M_PI)), rev, double (speed), rpm, true);
+  AllLeft.setVelocity(speedPct, pct);
+  AllRight.setVelocity(speedPct, pct);
+
+  
+
+  AllLeft.rotateFor(forward, ((ROBOT_RADIUS * (turnDegree* (M_PI/180) ) ) / WHEEL_CIRCUMFERENCE) * DRIVE_GEAR_RATIO  , rev, true);
+  AllRight.rotateFor(reverse, ((ROBOT_RADIUS * (turnDegree * (M_PI/180) ) ) / WHEEL_CIRCUMFERENCE) * DRIVE_GEAR_RATIO, rev); 
   SetTimeout(0);
 
 }
@@ -37,10 +45,26 @@ void IntakeAuto(int timeout)
   intake.stop();
 }
 
-void IntakeSpitAuto(int dist, int speed, int timeout)
+void IntakeSpitAuto(float turnDegree, int speedPct, int timeout)
 {
   SetTimeout(timeout);
-  intake.spinFor(forward, double (dist), rev, double (speed), rpm, false);
+
+  intake.setVelocity(speedPct, pct);
+
+  intake.rotateFor(forward, turnDegree, deg, true);
+  SetTimeout(0);
+}
+
+void ShootCatapultAuto(int timeout) {
+  SetTimeout(timeout);
+  while (true) {
+    thrower.spin(forward, 100, pct);
+    if (thrower.velocity(pct) < 0.5) {
+      break;
+    }
+  }
+  thrower.spin(forward, 100, pct);
+
   SetTimeout(0);
 }
 
@@ -59,7 +83,7 @@ void IntakeSpitAuto(int dist, int speed, int timeout)
 //   catapult.spin(forward);
 // }
 
-void moveForwardPID(int speed) {
+void moveForwardPID(int speedPct) {
 
   int encPositionLeft;
   int encPositionRight;
@@ -86,8 +110,8 @@ if (error > 100) {
 else if(error < -100){
   error = -100;
 }
-    AllLeft.spin(forward, speed - modifiedError, pct);
-    AllRight.spin(forward, speed + modifiedError, pct);
+    AllLeft.spin(forward, speedPct - modifiedError, pct);
+    AllRight.spin(forward, speedPct + modifiedError, pct);
   }
 
   // if ((abs(errorPositionLeft) > 5) || (abs(errorPositionRight) > 5)) {
