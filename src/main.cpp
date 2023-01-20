@@ -23,6 +23,13 @@ void UserControl() {
     catapultLogic();
   }
 }
+void Autonomous()
+{
+
+  Routine1Auton();
+  // GPStest();
+  // moveinBox();
+}
 
 void Autonomous() { redStart(); }
 

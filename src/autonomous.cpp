@@ -1,22 +1,38 @@
 #include "vex.h"
 #include "Autonomous.h"
 
-void setMotorTimeout(int timeSeconds){
-
-  leftWheels.setTimeout(timeSeconds, sec);
-  rightWheels.setTimeout(timeSeconds, sec);
+/*----------
+MOVEMENT
+----------*/
+void SetTimeout(int mSec)
+{
+  AllLeft.setTimeout(mSec, msec);
+  AllRight.setTimeout(mSec, msec);
 }
 
-void spinRoller() {
-  setMotorTimeout(2);
-  intakeMotor.spin(reverse,100,pct);
-  wait(750, msec);
-  intakeMotor.stop();
+void moveForward(float distanceCM, int speedPct, int timeout)
+{
+  SetTimeout(timeout);
+  AllLeft.setVelocity(speedPct, pct);
+  AllRight.setVelocity(speedPct, pct);
+  // (GEAR RATIO IS ONE-TO-ONE, so the "distance" would be times 1)
+  // AllRight.rotateFor(forward, (distanceCM/WHEEL_CIRCUMFERENCE) * DRIVE_GEAR_RATIO, rev, false);
+  AllMotors.rotateFor(forward, (distanceCM/WHEEL_CIRCUMFERENCE) * DRIVE_GEAR_RATIO, rev, true);
+  SetTimeout(0);
+
+}
+
+void TurninPlace(int turnDegree, int speedPct, int timeout) //a postitve number will turn right, a negative number will turn left//
+{
+  SetTimeout(timeout);
+  AllLeft.setVelocity(speedPct, pct);
+  AllRight.setVelocity(speedPct, pct);
+
   
-}
 
-void moveForward(float distanceCM, int speedPCT, int timeSec){
-  setMotorTimeout(timeSec);
+  AllLeft.rotateFor(forward, ((ROBOT_RADIUS * (turnDegree* (M_PI/180) ) ) / WHEEL_CIRCUMFERENCE) * DRIVE_GEAR_RATIO  , rev, true);
+  AllRight.rotateFor(reverse, ((ROBOT_RADIUS * (turnDegree * (M_PI/180) ) ) / WHEEL_CIRCUMFERENCE) * DRIVE_GEAR_RATIO, rev); 
+  SetTimeout(0);
 
 //public bool vex::motor::spinFor(directionType dir, double rotation, rotationUnits units, double velocity, velocityUnits units_v, bool waitForCompletion=true)
 
@@ -26,8 +42,53 @@ void moveForward(float distanceCM, int speedPCT, int timeSec){
   setMotorTimeout(0);
 }
 
+void IntakeAuto(int timeout)
+{
+  SetTimeout(timeout);
+  intake.spin(reverse,100,pct);
+  SetTimeout(0);
+  intake.stop();
+}
 
-void moveForwardPID(int speed) {
+void IntakeSpitAuto(float turnDegree, int speedPct, int timeout)
+{
+  SetTimeout(timeout);
+
+  intake.setVelocity(speedPct, pct);
+
+  intake.rotateFor(forward, turnDegree, deg, true);
+  SetTimeout(0);
+}
+
+void ShootCatapultAuto(int timeout) {
+  SetTimeout(timeout);
+  while (true) {
+    thrower.spin(forward, 100, pct);
+    if (thrower.velocity(pct) < 0.5) {
+      break;
+    }
+  }
+  thrower.spin(forward, 100, pct);
+
+  SetTimeout(0);
+}
+
+// void catapultLogic() {
+// controller1.ButtonL2.pressed(windUp);
+// catapultBumper.pressed(windBack);
+// controller1.ButtonR2.pressed(intakeOn);
+// }
+
+// void windBack() {
+//   catapult.stop();
+
+// }
+
+// void windUp() {
+//   catapult.spin(forward);
+// }
+
+void moveForwardPID(int speedPct) {
 
   int encPositionLeft;
   int encPositionRight;
@@ -54,8 +115,8 @@ if (error > 100) {
 else if(error < -100){
   error = -100;
 }
-    leftWheels.spin(forward, speed - modifiedError, pct);
-    rightWheels.spin(forward, speed + modifiedError, pct);
+    AllLeft.spin(forward, speedPct - modifiedError, pct);
+    AllRight.spin(forward, speedPct + modifiedError, pct);
   }
 
   // if ((abs(errorPositionLeft) > 5) || (abs(errorPositionRight) > 5)) {
