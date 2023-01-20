@@ -1,21 +1,20 @@
 #include "vex.h"
-#include "robot-config.h"
+
 using namespace vex;
 
 // A global instance of brain used for printing to the V5 brain screen
 brain Brain;
-
 controller controller1(primary);
 
-//drivetrain motors (all blue motors)
-motor left1(PORT3,ratio6_1, false);
-motor left2(PORT4,ratio6_1, false);
-motor left3(PORT5,ratio6_1, false);
+motor leftFront(PORT3, ratio18_1, false);
+motor leftMiddle(PORT4, ratio18_1, false);
+motor leftBack(PORT5, ratio18_1, false);
 
-motor right1(PORT6,ratio6_1, true);
-motor right2(PORT7,ratio6_1, true);
-motor right3(PORT8,ratio6_1, true);
+motor rightFront(PORT6, ratio18_1, true);
+motor rightMiddle(PORT7, ratio18_1, true);
+motor rightBack(PORT8, ratio18_1, true);
 
+bumper catapultBumper(Brain.ThreeWirePort.A);
 
 //intake motor (green motor) also serves as our roller
 motor intake(PORT15,ratio18_1,true);
@@ -50,7 +49,10 @@ const float DRIVE_GEAR_RATIO = 1;
 const float TRACK_WIDTH = 7.5;
 const float ROBOT_RADIUS = sqrtf( powf( (TRACK_WIDTH/2), 2) + powf( (WHEEL_BASE/2), 2) );
 
+motor catapult(PORT9, ratio36_1, true);
+// motor intake(PORT16, ratio18_1, true);
 
+motor intakeMotor(PORT16, ratio18_1, false);
 /**
  * Used to initialize code/tasks/devices added using tools in VEXcode Pro.
  *
