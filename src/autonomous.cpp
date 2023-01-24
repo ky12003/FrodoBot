@@ -1,6 +1,5 @@
 #include "vex.h"
-#include "autonomous.h"
-using namespace vex;
+#include "Autonomous.h"
 
 /*----------
 MOVEMENT
@@ -35,6 +34,12 @@ void TurninPlace(int turnDegree, int speedPct, int timeout) //a postitve number 
   AllRight.rotateFor(reverse, ((ROBOT_RADIUS * (turnDegree * (M_PI/180) ) ) / WHEEL_CIRCUMFERENCE) * DRIVE_GEAR_RATIO, rev); 
   SetTimeout(0);
 
+//public bool vex::motor::spinFor(directionType dir, double rotation, rotationUnits units, double velocity, velocityUnits units_v, bool waitForCompletion=true)
+
+  leftWheels.spinFor(fwd, double(distanceCM/(10.16 * M_PI)), rev, double(speedPCT), velocityUnits::pct, false);
+  rightWheels.spinFor(fwd, double(distanceCM/(10.16 * M_PI)), rev, double(speedPCT), velocityUnits::pct, false);
+
+  setMotorTimeout(0);
 }
 
 void IntakeAuto(int timeout)
@@ -85,14 +90,14 @@ void moveForwardPID(int speedPct) {
   int modifiedError;
   float kp = 0.1;
 
-  AllLeft.resetPosition();
-  AllRight.resetPosition();
+  leftWheels.resetPosition();
+  rightWheels.resetPosition();
   // double errorPositionLeft = targetPosition- encPositionLeft;
   // double errorPositionRight = targetPosition - encPositionRight;
   while (true) {
     
-    encPositionLeft = AllLeft.position(deg);
-    encPositionRight = AllRight.position(deg);
+    encPositionLeft = leftWheels.position(deg);
+    encPositionRight = rightWheels.position(deg);
     error = encPositionLeft - encPositionRight;
     modifiedError = int (kp*error);
     printf("%d %d \n", encPositionLeft, encPositionRight);
@@ -111,3 +116,18 @@ else if(error < -100){
   // if ((abs(errorPositionLeft) > 5) || (abs(errorPositionRight) > 5)) {
   // }
 }
+
+// void moveForwardPID() {
+
+//   double targetVelocity = 25;
+//   double encVelocityLeft = leftWheels.velocity(pct);
+//   double encVelocityRight = rightWheels.velocity(pct);
+//   double errorVelocityLeft = targetVelocity - encVelocityLeft;
+//   double errorVelocityRight = targetVelocity - encVelocityRight;
+
+// if ((abs(errorVelocityLeft) > 5) || (abs(errorVelocityRight) > 5)) {
+//    leftWheels.spin(forward, encVelocityLeft + errorVelocityLeft, pct);
+//    rightWheels.spin(forward, encVelocityRight + errorVelocityRight, pct);
+// }
+
+// }

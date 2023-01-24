@@ -4,27 +4,23 @@ using namespace vex;
 
 extern brain Brain;
 
-extern controller controller1;
+extern controller controller1; 
 
-//drivetrain motors
-extern motor left1;
-extern motor left2;
-extern motor left3;
+extern motor leftFront;
+extern motor leftMiddle;
+extern motor leftBack;
 
-extern motor right1;
-extern motor right2;
-extern motor right3; 
+extern motor rightFront;
+extern motor rightMiddle;
+extern motor rightBack;
 
-//intake motors
-extern motor intake;
+extern motor_group leftWheels;
+extern motor_group rightWheels;
 
-//catapult motor
-extern motor thrower;
+extern bumper catapultBumper;
+extern motor intakeMotor;
 
-//motor groups
-extern motor_group AllLeft;
-extern motor_group AllRight;
-extern motor_group AllMotors;
+extern motor catapult;
 
 
 //motor encoders
