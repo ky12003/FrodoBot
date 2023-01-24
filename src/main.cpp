@@ -30,7 +30,8 @@ void usercontrol()
 void Autonomous()
 {
 
-  Routine1Auton();
+  // Routine1Auton();
+  Routine1Skills();
   // GPStest();
   // moveinBox();
 }

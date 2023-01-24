@@ -57,7 +57,7 @@ void IntakeSpitAuto(float turnDegree, int speedPct, int timeout)
 
 void ShootCatapultAuto(int timeout) {
   SetTimeout(timeout);
-  thrower.rotateFor(reverse, 410, deg, true);
+  thrower.rotateFor(reverse, 460, deg, true);
   thrower.setRotation(0, deg);
   SetTimeout(0);
 }
