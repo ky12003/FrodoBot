@@ -12,20 +12,20 @@
 #include "vex.h"
 
 #include "Autonomous.h"
-#include "CatapultFunctions.h"
-#include "DrivingFunctions.h"
+#include "RobotFunctions.h"
+#include "driving-function.h"
 #include "Routines.h"
 
 using namespace vex;
 void UserControl() {
   while (true) {
-    arcadeDrive();
-    catapultLogic();
+    tankDrive();
+    Catapult();
+    intakeToggle();
   }
 }
 void Autonomous()
 {
-
   // Routine1Auton();
   Routine1Skills();
   // GPStest();
