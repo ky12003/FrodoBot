@@ -32,8 +32,6 @@ void Autonomous()
   // moveinBox();
 }
 
-void Autonomous() { redStart(); }
-
 competition Competition;
 int main() {
   // Initializing Robot Configuration. DO NOT REMOVE!
