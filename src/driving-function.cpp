@@ -25,8 +25,8 @@ void tankDrive()
 {
   if (abs(controller1.Axis2.value()) > 5 || abs(controller1.Axis3.value()) > 5)
   {
-    AllRight.spin(forward, (controller1.Axis2.value()) * 0.8, pct);
-    AllLeft.spin(forward, (controller1.Axis3.value()) * 0.8, pct); 
+    AllRight.spin(forward, (controller1.Axis2.value()) * 0.7, pct);
+    AllLeft.spin(forward, (controller1.Axis3.value()) * 0.7, pct); 
     // printf("\nleftside: %n", controller1.Axis2.value());
     // printf("\nrightside: %n", controller1.Axis3.value());
   }
