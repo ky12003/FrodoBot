@@ -34,12 +34,6 @@ void TurninPlace(int turnDegree, int speedPct, int timeout) //a postitve number 
   AllRight.rotateFor(reverse, ((ROBOT_RADIUS * (turnDegree * (M_PI/180) ) ) / WHEEL_CIRCUMFERENCE) * DRIVE_GEAR_RATIO, rev); 
   SetTimeout(0);
 
-//public bool vex::motor::spinFor(directionType dir, double rotation, rotationUnits units, double velocity, velocityUnits units_v, bool waitForCompletion=true)
-
-  leftWheels.spinFor(fwd, double(distanceCM/(10.16 * M_PI)), rev, double(speedPCT), velocityUnits::pct, false);
-  rightWheels.spinFor(fwd, double(distanceCM/(10.16 * M_PI)), rev, double(speedPCT), velocityUnits::pct, false);
-
-  setMotorTimeout(0);
 }
 
 void IntakeAuto(int timeout)
@@ -90,14 +84,14 @@ void moveForwardPID(int speedPct) {
   int modifiedError;
   float kp = 0.1;
 
-  leftWheels.resetPosition();
-  rightWheels.resetPosition();
+  AllLeft.resetPosition();
+  AllRight.resetPosition();
   // double errorPositionLeft = targetPosition- encPositionLeft;
   // double errorPositionRight = targetPosition - encPositionRight;
   while (true) {
     
-    encPositionLeft = leftWheels.position(deg);
-    encPositionRight = rightWheels.position(deg);
+    encPositionLeft = AllLeft.position(deg);
+    encPositionRight = AllRight.position(deg);
     error = encPositionLeft - encPositionRight;
     modifiedError = int (kp*error);
     printf("%d %d \n", encPositionLeft, encPositionRight);
