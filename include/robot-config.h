@@ -17,7 +17,7 @@ extern motor intake;
 
 //catapult motor
 extern motor thrower;
-extern bumper catapultBumper;
+extern limit catapultBumper;
 
 //motor groups
 extern motor_group AllLeft;

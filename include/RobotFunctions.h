@@ -9,6 +9,7 @@ void catapultLogic();
 // helper functions for catapult
 void windBack();
 void windUp();
+void shootDisks();
 
 
 #endif 

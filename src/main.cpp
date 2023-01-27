@@ -15,19 +15,22 @@
 #include "RobotFunctions.h"
 #include "DrivingFunctions.h"
 #include "Routines.h"
+#include "robot-config.h"
 
 using namespace vex;
 void UserControl() {
+  thrower.setVelocity(100, pct);
   while (true) {
     tankDrive();
     intakeToggle();
     catapultLogic();
+    // printf("\ntest: %li", catapultBumper.value());
   }
 }
 void Autonomous()
 {
-  // Routine1Auton();
-  Routine1Skills();
+  Routine1Auton();
+  // Routine1Skills();
   // GPStest();
   // moveinBox();
 }
