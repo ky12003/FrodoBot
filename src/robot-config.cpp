@@ -20,6 +20,7 @@ motor intake(PORT15,ratio18_1,true);
 
 //catapult motor (red motor)
 motor thrower(PORT9,ratio36_1,false);
+bumper catapultBumper(Brain.ThreeWirePort.A);
 
 //motor groups 
 motor_group AllLeft(left1, left2, left3);

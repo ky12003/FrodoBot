@@ -3,19 +3,12 @@
 
 void intakeToggle();
 
-//function for intake to eat disks
-void Intake();
-
-//function for catapult to throw disks
+//logical to handle catapult and intake
 void catapultLogic();
 
 // helper functions for catapult
 void windBack();
 void windUp();
-
-//function for roller to spin rollers
-void Roller();
-void Catapult();
 
 
 #endif 

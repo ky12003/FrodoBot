@@ -13,15 +13,15 @@
 
 #include "Autonomous.h"
 #include "RobotFunctions.h"
-#include "driving-function.h"
+#include "DrivingFunctions.h"
 #include "Routines.h"
 
 using namespace vex;
 void UserControl() {
   while (true) {
     tankDrive();
-    Catapult();
     intakeToggle();
+    catapultLogic();
   }
 }
 void Autonomous()
