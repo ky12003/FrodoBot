@@ -16,11 +16,13 @@ motor right2(PORT7,ratio6_1, true);
 motor right3(PORT8,ratio6_1, true);
 
 //intake motor (green motor) also serves as our roller
-motor intake(PORT15,ratio18_1,true);
+motor intake(PORT14,ratio6_1,true);
 
 //catapult motor (red motor)
 motor thrower(PORT9,ratio36_1,false);
-limit catapultBumper(Brain.ThreeWirePort.A);
+limit catapultLimit(Brain.ThreeWirePort.A);
+// bumper catapultBumper(Brain.ThreeWirePort.D);
+// sonar throwerSonar(Brain.ThreeWirePort.B);
 
 //motor groups 
 motor_group AllLeft(left1, left2, left3);
