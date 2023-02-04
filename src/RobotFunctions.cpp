@@ -22,7 +22,7 @@ void catapultLogic() {
 
   controller1.ButtonL2.pressed(shootDisks);
   controller1.ButtonR1.pressed(intakeToggle);
-  controller1.ButtonR2.pressed(reverseIntake);
+  // controller1.ButtonR2.pressed(reverseIntake);
 
   // intake logic
 }
@@ -49,61 +49,62 @@ void shootDisks() {
   prevValue = catapultLimit.value();
 }
 
-void intakeToggle() {
-  if (intaking) {
-    intake.stop();
-  } else {
-    if (intakePosition) {
-      intake.spin(forward, 100, pct);
-    } else {
-      { intake.spin(reverse, 100, pct); }
-    }
-  }
-  intaking = !intaking;
-}
+// void intakeToggle() {
+//   if (intaking) {
+//     intake.stop();
+//   } else {
+//     if (intakePosition) {
+//       intake.spin(forward, 80, pct);
+//     }
+//     else {
+//         { intake.spin(reverse, 100, pct); }
+//       }
+//     }
+//     intaking = !intaking;
+//   }
 
 void reverseIntake() { intakePosition = !intakePosition; }
 
-// bool doIntakeOut = false;
-// bool doIntakeIn = false;
-// bool intakeToggleBuffering = false;
-// void intakeToggle(){
-//   if(controller1.ButtonR1.pressing())
-//   {
-//     if (!intakeToggleBuffering) {
+bool doIntakeOut = false;
+bool doIntakeIn = false;
+bool intakeToggleBuffering = false;
+void intakeToggle(){
+  if(controller1.ButtonR1.pressing())
+  {
+    if (!intakeToggleBuffering) {
 
-//       intakeToggleBuffering = true;
-//       doIntakeOut = !doIntakeOut;
-//       doIntakeIn = false;
-//       if (doIntakeOut) {
-//         controller1.rumble("-");
-//       } else {
-//         controller1.rumble("..");
-//       }
-//     }
-//   }
-//   else if (controller1.ButtonR2.pressing()) {
-//     if (!intakeToggleBuffering) {
-//       intakeToggleBuffering = true;
-//       doIntakeIn = !doIntakeIn;
-//       doIntakeOut = false;
-//       if (doIntakeIn) {
-//         controller1.rumble(".");
-//       } else {
-//         controller1.rumble("..");
-//       }
-//     }
-//   }
-//   else {
-//     // controller1.rumble(".");
-//     intakeToggleBuffering = false;
-//   }
+      intakeToggleBuffering = true;
+      doIntakeOut = !doIntakeOut;
+      doIntakeIn = false;
+      if (doIntakeOut) {
+        controller1.rumble("-");
+      } else {
+        controller1.rumble("..");
+      }
+    }
+  }
+  else if (controller1.ButtonR2.pressing()) {
+    if (!intakeToggleBuffering) {
+      intakeToggleBuffering = true;
+      doIntakeIn = !doIntakeIn;
+      doIntakeOut = false;
+      if (doIntakeIn) {
+        controller1.rumble(".");
+      } else {
+        controller1.rumble("..");
+      }
+    }
+  }
+  else {
+    // controller1.rumble(".");
+    intakeToggleBuffering = false;
+  }
 
-//   if (doIntakeOut) {
-//     intake.spin(fwd, 100, pct);
-//   } else if (doIntakeIn) {
-//     intake.spin(directionType::rev, 100, pct);
-//   } else {
-//     intake.stop();
-//   }
-//  }
+  if (doIntakeOut) {
+    intake.spin(fwd, 100, pct);
+  } else if (doIntakeIn) {
+    intake.spin(directionType::rev, 100, pct);
+  } else {
+    intake.stop();
+  }
+ }

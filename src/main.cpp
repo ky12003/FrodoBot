@@ -26,6 +26,7 @@ void UserControl() {
   while (true) {
     tankDrive();
     catapultLogic();
+    intakeToggle();
     // printf("\ntest: %li", catapultBumper.value());
   }
 }
@@ -33,6 +34,7 @@ void Autonomous()
 {
   // Routine1Auton();
   Routine1Skills();
+  // testAuton();
   // GPStest();
   // moveinBox();
 }
