@@ -43,6 +43,10 @@ void TurninPlace(int turnDegree, int speedPct,
   SetTimeout(0);
 }
 
+/*-----
+SCORING
+------*/
+
 void IntakeAuto(int timeout) {
   SetTimeout(timeout);
   intake.spin(reverse, 100, pct);
@@ -68,11 +72,27 @@ void IntakeSpitAuto(float turnDegree, int speedPct, int timeout) {
   SetTimeout(0);
 }
 
+long int prevValueAuton = -1;
+bool catapultWindAuton = true;
+void windCatapultAuton() {
+  if (catapultLimit.value() == prevValueAuton) {
+    thrower.spin(reverse, 100, pct);
+  } else {
+    catapultWindAuton = !catapultWindAuton;
+    thrower.stop();
+  }
+}
+
 void ShootCatapultAuto(int timeout) {
   SetTimeout(timeout);
-  thrower.rotateFor(reverse, 460, deg, true);
+  thrower.rotateFor(reverse, 480, deg, true);
   thrower.setRotation(0, deg);
   SetTimeout(0);
+  // SetTimeout(timeout);
+  // thrower.spinFor(reverse, 1200, msec);
+  // SetTimeout(0);
+  // catapultWindAuton = true;
+  // prevValueAuton = catapultLimit.value();
 }
 
 // void catapultLogic() {
