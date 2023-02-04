@@ -49,9 +49,9 @@ void windUp() {
 }
 
 void shootDisks() {
-  thrower.setTimeout(1200, msec);
-  thrower.spinFor(reverse, 1200, msec);
-  thrower.setTimeout(0, msec);
+  // thrower.setTimeout(800, msec);
+  thrower.spinFor(reverse, 800, msec);
+  // thrower.setTimeout(0, msec);
   catapultWind = true;
   prevValue = catapultLimit.value();
 }

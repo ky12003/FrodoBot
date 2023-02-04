@@ -14,7 +14,7 @@ void Routine1Auton() {
   moveForward(-10, 70, 1000);
   wait(200, msec);
   IntakeSpitAuto(100, 50, 5000); // roll the roller
-  moveForward(30, 10, 5000);    // move forward away from the roller
+  moveForward(20, 10, 5000);    // move forward away from the roller
   wait(800, msec);
   TurninPlace(85, 10, 4000); // turn clockwise towards the basket
   wait(800, msec);
@@ -36,23 +36,23 @@ void Routine1Skills() {
   wait(300, msec);
   TurninPlace(90, 15, 4000); // turn clockwise towards the basket
   wait(300, msec);
-  moveForward(140, 20, 3000); // go towards the basket to shoot
+  moveForward(135, 20, 3000); // go towards the basket to shoot
   wait(300, msec);
-  TurninPlace(-20, 20, 3000); // turn counterclockwise to position torwards goal
-  wait(300, msec);
+  // TurninPlace(-20, 20, 3000); // turn counterclockwise to position torwards goal
+  // wait(300, msec);
   ShootCatapultAuto(4000);    // shoot the preload disks into high goal
-  wait(300, msec);
-  TurninPlace(20, 20, 3000); // Turn back clockwise to original positon.
+  // wait(300, msec);
+  // TurninPlace(20, 20, 3000); // Turn back clockwise to original positon.
 
 
   // PRELOAD/LOW GOAL PROCEDURE X2
   for (int i = 0; i < 2; i++) {
     wait(500, msec);
-    moveForward(-30, 10, 4000); // move backwards towards the loading zone
+    moveForward(-29 - (i*7), 10, 4000); // move backwards towards the loading zone
     wait(500, msec);
     TurninPlace(90, 15, 4000); // turn clockwise for additional preloads
     wait(500, msec);
-    moveForward(35 + (i * 3.5), 10, 5000); // move forwards towards loading zone
+    moveForward(30 /*+ (i * 3.5)*/, 10, 5000); // move forwards towards loading zone
     wait(3000, msec);
     moveForward(-15, 10, 3000); // move backwards away from the loading zone
     wait(500, msec);
@@ -68,7 +68,7 @@ void Routine1Skills() {
   wait(400, msec);
   TurninPlace(90, 15, 4000); // turn clockwiseto adjust to the roller position
   wait(400, msec);
-  moveForward(-5, 15, 6000); // move backwards to adjust to the roller position
+  moveForward(-2, 15, 6000); // move backwards to adjust to the roller position
   wait(400, msec);
   TurninPlace(-90, 15, 4000); // turn counterclockwise to adjust to the roller position
   wait(400, msec);
@@ -118,6 +118,7 @@ void Routine2Auton() {
 }
 
 void testAuton() {
+  printf("test");
   windCatapultAuton();
 }
 
