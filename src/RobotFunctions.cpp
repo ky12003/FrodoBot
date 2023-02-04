@@ -25,7 +25,7 @@ void catapultLogic() {
   // controller1.ButtonL1.pressed(manualWindUp);
   // controller1.ButtonL2.released(manualStopThrower);
   controller1.ButtonL2.pressed(shootDisks);
-  controller1.ButtonR1.pressed(intakeToggle);
+  // controller1.ButtonR1.pressed(intakeToggle);
   // controller1.ButtonR2.pressed(reverseIntake);
 
   // intake logic
@@ -46,9 +46,9 @@ void windUp() {
 }
 
 void shootDisks() {
-  thrower.setTimeout(1200, msec);
-  thrower.spinFor(reverse, 1200, msec);
-  thrower.setTimeout(0, msec);
+  // thrower.setTimeout(800, msec);
+  thrower.spinFor(reverse, 800, msec);
+  // thrower.setTimeout(0, msec);
   catapultWind = true;
   prevValue = catapultLimit.value();
 }

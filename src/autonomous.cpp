@@ -75,7 +75,8 @@ void IntakeSpitAuto(float turnDegree, int speedPct, int timeout) {
 long int prevValueAuton = -1;
 bool catapultWindAuton = true;
 void windCatapultAuton() {
-  if (catapultLimit.value() == prevValueAuton) {
+  
+  if (!catapultLimit.pressing() && catapultWindAuton) {
     thrower.spin(reverse, 100, pct);
   } else {
     catapultWindAuton = !catapultWindAuton;
@@ -85,7 +86,7 @@ void windCatapultAuton() {
 
 void ShootCatapultAuto(int timeout) {
   SetTimeout(timeout);
-  thrower.rotateFor(reverse, 480, deg, true);
+  thrower.rotateFor(reverse, 510, deg, true);
   thrower.setRotation(0, deg);
   SetTimeout(0);
   // SetTimeout(timeout);
