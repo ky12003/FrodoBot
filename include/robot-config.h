@@ -14,6 +14,7 @@ extern motor right3;
 
 //intake motors
 extern motor intake;
+extern optical rollerOptical;
 
 //catapult motor
 extern motor thrower;
@@ -31,8 +32,6 @@ extern motor_group AllMotors;
 extern encoder encoder1;
 extern encoder encoder2;
 extern encoder cataswitch;
-
-
 
 // GPS
 extern gps DrivetrainGPS;
