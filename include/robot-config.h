@@ -12,6 +12,10 @@ extern motor right1;
 extern motor right2;
 extern motor right3; 
 
+//optical sensor
+extern optical rollerOptical;
+
+
 //intake motors
 extern motor intake;
 

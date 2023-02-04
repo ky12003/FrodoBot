@@ -2,6 +2,7 @@
 #include "RobotFunctions.h"
 #include "robot-config.h"
 
+
 #include <iostream>
 using namespace vex;
 
@@ -15,15 +16,10 @@ void catapultLogic() {
     windUp();
   }
 
-  // if (controller1.ButtonR1.pressing()) {
-  //   intakePosition = true;
-  // }
-  // if (controller1.ButtonR2.pressing()) {
-  //   intakePosition = false;
-  // }
+  if (rollerOptical.isNearObject()) {
+    std::cout << rollerOptical.color() << std::endl;
+  }
 
-  // controller1.ButtonL1.pressed(manualWindUp);
-  // controller1.ButtonL2.released(manualStopThrower);
   controller1.ButtonL2.pressed(shootDisks);
   controller1.ButtonR1.pressed(intakeToggle);
   controller1.ButtonR2.pressed(reverseIntake);
@@ -58,14 +54,13 @@ void intakeToggle() {
     intake.stop();
   } else {
     if (intakePosition) {
-      intake.spin(forward, 80, pct);
+      intake.spin(forward, 100, pct);
+    } else {
+      { intake.spin(reverse, 100, pct); }
     }
-    else {
-        { intake.spin(reverse, 100, pct); }
-      }
-    }
-    intaking = !intaking;
   }
+  intaking = !intaking;
+}
 
 void reverseIntake() { intakePosition = !intakePosition; }
 

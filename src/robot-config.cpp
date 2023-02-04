@@ -15,6 +15,10 @@ motor right1(PORT6,ratio6_1, true);
 motor right2(PORT7,ratio6_1, true);
 motor right3(PORT8,ratio6_1, true);
 
+//optical sensor
+optical rollerOptical(PORT11, false);
+
+
 //intake motor (green motor) also serves as our roller
 motor intake(PORT14,ratio6_1,true);
 
