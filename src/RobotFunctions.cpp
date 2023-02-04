@@ -2,6 +2,8 @@
 #include "RobotFunctions.h"
 #include "robot-config.h"
 
+#include <string>
+
 #include <iostream>
 using namespace vex;
 
@@ -10,23 +12,24 @@ bool intakePosition = false;
 bool catapultWind = true;
 long int prevValue = -1;
 
+
 void catapultLogic() {
   if (catapultWind) {
     windUp();
   }
 
-  // if (controller1.ButtonR1.pressing()) {
-  //   intakePosition = true;
-  // }
-  // if (controller1.ButtonR2.pressing()) {
-  //   intakePosition = false;
-  // }
+// roller optical code
+// std::string s = "red";
+  if (rollerOptical.isNearObject()) {
+    while (rollerOptical.color()) {
+      intake.spin(fwd, 10, pct);
+    }
+  }
 
   // controller1.ButtonL1.pressed(manualWindUp);
   // controller1.ButtonL2.released(manualStopThrower);
   controller1.ButtonL2.pressed(shootDisks);
   controller1.ButtonR1.pressed(intakeToggle);
-  // controller1.ButtonR2.pressed(reverseIntake);
 
   // intake logic
 }
@@ -72,9 +75,8 @@ void reverseIntake() { intakePosition = !intakePosition; }
 bool doIntakeOut = false;
 bool doIntakeIn = false;
 bool intakeToggleBuffering = false;
-void intakeToggle(){
-  if(controller1.ButtonR1.pressing())
-  {
+void intakeToggle() {
+  if (controller1.ButtonR1.pressing()) {
     if (!intakeToggleBuffering) {
 
       intakeToggleBuffering = true;
@@ -86,8 +88,7 @@ void intakeToggle(){
         controller1.rumble("..");
       }
     }
-  }
-  else if (controller1.ButtonR2.pressing()) {
+  } else if (controller1.ButtonR2.pressing()) {
     if (!intakeToggleBuffering) {
       intakeToggleBuffering = true;
       doIntakeIn = !doIntakeIn;
@@ -98,8 +99,7 @@ void intakeToggle(){
         controller1.rumble("..");
       }
     }
-  }
-  else {
+  } else {
     // controller1.rumble(".");
     intakeToggleBuffering = false;
   }
@@ -111,4 +111,4 @@ void intakeToggle(){
   } else {
     intake.stop();
   }
- }
+}
