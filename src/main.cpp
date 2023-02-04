@@ -13,21 +13,28 @@
 
 #include "Autonomous.h"
 #include "RobotFunctions.h"
-#include "driving-function.h"
+#include "DrivingFunctions.h"
 #include "Routines.h"
+#include "robot-config.h"
+#include <iostream>
+
 
 using namespace vex;
 void UserControl() {
+  thrower.setVelocity(100, pct);
+
   while (true) {
     tankDrive();
-    Catapult();
+    catapultLogic();
     intakeToggle();
+    // printf("\ntest: %li", catapultBumper.value());
   }
 }
 void Autonomous()
 {
   // Routine1Auton();
   Routine1Skills();
+  // testAuton();
   // GPStest();
   // moveinBox();
 }

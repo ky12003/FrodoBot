@@ -1,41 +1,74 @@
-#include "driving-function.h"
 #include "vex.h"
+#include "RobotFunctions.h"
 #include "robot-config.h"
+
+#include <iostream>
 using namespace vex;
 
+bool intaking = false;
+bool intakePosition = false;
+bool catapultWind = true;
+long int prevValue = -1;
 
-bool catapultDown = true;
-void Catapult()
-{
-  if (controller1.ButtonL1.pressing())
-  {
-    thrower.spin(reverse, 100, pct); // keep reversing the intake (it will launch automatically when it gets to the bottom)
-    catapultDown = false;
+void catapultLogic() {
+  if (catapultWind) {
+    windUp();
   }
-  else
-  {
-    if (catapultDown == true) {
-      thrower.stop();
-    } else {
-      thrower.spin(forward, 100, pct); // buffer
-      if (thrower.velocity(pct) < 0.5) {
-        catapultDown = true;
-      }
-    }
-    
+
+  // if (controller1.ButtonR1.pressing()) {
+  //   intakePosition = true;
+  // }
+  // if (controller1.ButtonR2.pressing()) {
+  //   intakePosition = false;
+  // }
+
+  // controller1.ButtonL1.pressed(manualWindUp);
+  // controller1.ButtonL2.released(manualStopThrower);
+  controller1.ButtonL2.pressed(shootDisks);
+  controller1.ButtonR1.pressed(intakeToggle);
+  // controller1.ButtonR2.pressed(reverseIntake);
+
+  // intake logic
+}
+
+void manualWindUp() { thrower.spin(reverse, 100, pct); }
+
+void manualStopThrower() { thrower.stop(); }
+
+void windUp() {
+
+  if (catapultLimit.value() == prevValue) {
+    thrower.spin(reverse, 100, pct);
+  } else {
+    catapultWind = !catapultWind;
+    thrower.stop();
   }
 }
 
-// void windBack() {
-//   thrower.stop();
+void shootDisks() {
+  thrower.setTimeout(1200, msec);
+  thrower.spinFor(reverse, 1200, msec);
+  thrower.setTimeout(0, msec);
+  catapultWind = true;
+  prevValue = catapultLimit.value();
+}
 
-// }
+// void intakeToggle() {
+//   if (intaking) {
+//     intake.stop();
+//   } else {
+//     if (intakePosition) {
+//       intake.spin(forward, 80, pct);
+//     }
+//     else {
+//         { intake.spin(reverse, 100, pct); }
+//       }
+//     }
+//     intaking = !intaking;
+//   }
 
-// void windUp() {
-//   thrower.spin(forward);
-// }
+void reverseIntake() { intakePosition = !intakePosition; }
 
-//intake wheel control
 bool doIntakeOut = false;
 bool doIntakeIn = false;
 bool intakeToggleBuffering = false;
@@ -43,7 +76,7 @@ void intakeToggle(){
   if(controller1.ButtonR1.pressing())
   {
     if (!intakeToggleBuffering) {
-      
+
       intakeToggleBuffering = true;
       doIntakeOut = !doIntakeOut;
       doIntakeIn = false;
@@ -53,7 +86,7 @@ void intakeToggle(){
         controller1.rumble("..");
       }
     }
-  } 
+  }
   else if (controller1.ButtonR2.pressing()) {
     if (!intakeToggleBuffering) {
       intakeToggleBuffering = true;
@@ -78,4 +111,4 @@ void intakeToggle(){
   } else {
     intake.stop();
   }
-}
+ }

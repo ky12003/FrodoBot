@@ -2,20 +2,19 @@
 #define ROBOT_FUNCTIONS
 
 void intakeToggle();
+void reverseIntake();
 
-//function for intake to eat disks
-void Intake();
-
-//function for catapult to throw disks
+//logical to handle catapult and intake
 void catapultLogic();
 
+//manual controls for the robot
+// void manualWindUp();
+// void manualStopThrower();
+
 // helper functions for catapult
-void windBack();
 void windUp();
+void shootDisks();
 
-//function for roller to spin rollers
-void Roller();
-void Catapult();
-
+void printSensor();
 
 #endif 

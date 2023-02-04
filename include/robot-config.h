@@ -17,6 +17,9 @@ extern motor intake;
 
 //catapult motor
 extern motor thrower;
+extern limit catapultLimit;
+extern bumper catapultBumper;
+extern sonar throwerSonar;
 
 //motor groups
 extern motor_group AllLeft;
@@ -28,6 +31,8 @@ extern motor_group AllMotors;
 extern encoder encoder1;
 extern encoder encoder2;
 extern encoder cataswitch;
+
+
 
 // GPS
 extern gps DrivetrainGPS;
