@@ -38,12 +38,12 @@ void Routine3Auton() {
 }
 
 void Routine1Skills() {
-  moveForward(-10, 70, 1000);
+  moveForward(-10, 30, 1000);
   wait(300, msec);
   IntakeSpitAuto(340, 70, 5000); // roll the roller
   moveForward(10, 10, 5000);     // move forward away from the roller
   wait(300, msec);
-  TurninPlace(87, 15, 4000); // turn clockwise towards the basket
+  TurninPlace(85, 15, 4000); // turn clockwise towards the basket
   wait(300, msec);
   moveForward(165, 20, 3000); // go towards the basket to shoot
   wait(300, msec);
@@ -57,42 +57,41 @@ void Routine1Skills() {
   // PRELOAD/LOW GOAL PROCEDURE X2
   for (int i = 0; i < 2; i++) {
     wait(300, msec);
-    moveForward(-52 - (i*3), 10, 4000); // move backwards towards the loading zone
+    moveForward(-57 - (i*2.5), 20, 4000); // move backwards towards the loading zone
     wait(300, msec);
     TurninPlace(88, 15, 4000); // turn clockwise for additional preloads
     wait(300, msec);
     moveForward(30 /*+ (i * 3.5)*/, 10, 5000); // move forwards towards loading zone
     wait(3000, msec);
-    moveForward(-5, 10, 3000); // move backwards away from the loading zone
+    moveForward(-5, 20, 3000); // move backwards away from the loading zone
     wait(300, msec);
     TurninPlace(-90, 15, 4000); // turn counterclockwise towards goal
     wait(300, msec);
     moveForward(53, 15, 4000); // move forwards towards goal
     wait(300, msec);
-    TurninPlace(-30, 30, 3000); // turn to face basket
+    TurninPlace(-25, 30, 3000); // turn to face basket
     wait(300, msec);
     ShootCatapultAuto(4000);    // shoot the preload disks into high goal
-    TurninPlace(30, 30, 3000); // turn back to original position
+    TurninPlace(25, 30, 3000); // turn back to original position
   }
 
   wait(300, msec);
-  TurninPlace(-10, 40, 3000); // turn slightly counterclockwise to adjust
-  wait(300, msec);
   moveForward(-175, 40, 6000); // move backwards to other roller
   wait(300, msec);
-  TurninPlace(90, 15, 4000); // turn clockwiseto adjust to the roller position
+  TurninPlace(90, 15, 4000); // turn clockwise to adjust to the roller position
   wait(300, msec);
-  moveForward(-10, 15, 6000); // move backwards to adjust to the roller position
+  moveForward(-28, 35, 6000); // move backwards to adjust to the roller position
   wait(300, msec);
   TurninPlace(-90, 15, 4000); // turn counterclockwise to adjust to the roller position
   wait(300, msec);
-  moveForward(-49, 15, 6000); // move backwards torwards the roller
+  moveForward(-54, 15, 6000); // move backwards torwards the roller
   wait(300, msec);
   IntakeSpitAuto(370, 70, 5000); // roll the roller
   wait(300, msec);
   moveForward(40, 40, 3000); // move forward for expansion
-  wait(300, msec);
   TurninPlace(70, 50, 3000); // turn to get the tiles
+  wait(200, msec);
+  moveForward(25, 60, 2000); // move forward slightly to get more tiles
 }
 
 void Routine2Auton() {
