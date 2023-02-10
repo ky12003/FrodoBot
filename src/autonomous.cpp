@@ -86,7 +86,7 @@ void windCatapultAuton() {
 
 void ShootCatapultAuto(int timeout) {
   SetTimeout(timeout);
-  thrower.rotateFor(reverse, 510, deg, true);
+  thrower.rotateFor(reverse, 1010, deg, true);
   thrower.setRotation(0, deg);
   SetTimeout(0);
   // SetTimeout(timeout);

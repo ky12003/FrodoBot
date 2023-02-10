@@ -20,11 +20,11 @@ void catapultLogic() {
 
 // roller optical code
 // std::string s = "red";
-  if (rollerOptical.isNearObject()) {
-    while (rollerOptical.color()) {
-      intake.spin(fwd, 10, pct);
-    }
-  }
+  // if (rollerOptical.isNearObject()) {
+  //   while (rollerOptical.color()) {
+  //     intake.spin(fwd, 10, pct);
+  //   }
+  // }
 
   // controller1.ButtonL1.pressed(manualWindUp);
   // controller1.ButtonL2.released(manualStopThrower);

@@ -3,6 +3,7 @@
 
 void Routine1Auton();
 void Routine2Auton();
+void Routine3Auton();
 void Routine1Skills();
 
 void moveinBox();
