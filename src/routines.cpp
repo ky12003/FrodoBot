@@ -112,7 +112,12 @@ moveForward(-10, 70, 1000);
 }
 
 void testAuton() {
-  printf("test");
+  // printf("test");
+  windCatapultAuton();
+  wait(300, msec);
+  moveForward(20, 40, 3000);
+  ShootCatapultAuto(3000);
+  wait(300, msec); 
   windCatapultAuton();
 }
 

@@ -35,9 +35,9 @@ void Autonomous()
 {
   // Routine1Auton();
   // Routine2Auton();
-  Routine1Skills();
+  // Routine1Skills();
 
-  // testAuton();
+  testAuton();
   // GPStest();
   // moveinBox();
 }
