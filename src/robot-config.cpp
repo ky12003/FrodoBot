@@ -44,6 +44,11 @@ encoder encoderTop = encoder(Brain.ThreeWirePort.A);
 encoder encoderBottom = encoder(Brain.ThreeWirePort.B);
 encoder cataswitch = encoder(Brain.ThreeWirePort.H);
 
+// Expansion systems using pneumatics (*left = left when looking from the back of the robot)
+digital_out ExpansionLeft = digital_out(Brain.ThreeWirePort.B);
+
+// digital_out ExpansionRight; // (*port/use still undetermined)
+
 // CONSTANTS
 const float WHEEL_CIRCUMFERENCE = 6.72*(3.1415926535);
 const float WHEEL_BASE = 26.5;

@@ -28,6 +28,7 @@ void UserControl() {
     tankDrive();
     catapultLogic();
     intakeToggle();
+    doExpansion();
     // printf("\ntest: %li", catapultBumper.value());
   }
 }

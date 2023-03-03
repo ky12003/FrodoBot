@@ -13,6 +13,9 @@ bool catapultWind = true;
 long int prevValue = -1;
 
 
+/*-----------
+CATAPULT
+------------*/
 void catapultLogic() {
   if (catapultWind) {
     windUp();
@@ -70,6 +73,11 @@ void shootDisks() {
 //     intaking = !intaking;
 //   }
 
+
+/*-----------
+INTAKE
+------------*/
+
 void reverseIntake() { intakePosition = !intakePosition; }
 
 bool doIntakeOut = false;
@@ -112,3 +120,20 @@ void intakeToggle() {
     intake.stop();
   }
 }
+
+
+
+/*-----------
+EXPANSION
+------------*/
+// function that is called back to do tasks
+void excecuteExpansion() {
+  ExpansionLeft.set(1); // activate the pneumatic to activate expansion.
+}
+
+// function called into main.cpp that uses a callback.
+void doExpansion() {
+  controller1.ButtonA.pressed(excecuteExpansion);
+}
+
+
