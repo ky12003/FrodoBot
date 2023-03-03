@@ -9,6 +9,9 @@ void SetTimeout(int mSec) {
   AllRight.setTimeout(mSec, msec);
 }
 
+double velocityRightAdjust = 0;
+double velocityLeftAdjust = 0;
+
 void moveForward(float distanceCM, int speedPct, int timeout) {
   SetTimeout(timeout);
   AllLeft.setVelocity(speedPct, pct);
@@ -83,7 +86,7 @@ void windCatapultAuton() {
 }
 
 void ShootCatapultAuto(int timeout) {
-  thrower.spinFor(reverse, 500, msec);
+  thrower.spinFor(reverse, 300, msec);
   prevValueAuton = catapultLimit.value();
 }
 
