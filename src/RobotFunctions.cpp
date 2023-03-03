@@ -13,6 +13,9 @@ bool catapultWind = true;
 long int prevValue = -1;
 
 
+/*-----------
+CATAPULT
+------------*/
 void catapultLogic() {
   if (catapultWind) {
     windUp();
@@ -70,6 +73,11 @@ void shootDisks() {
 //     intaking = !intaking;
 //   }
 
+
+/*-----------
+INTAKE
+------------*/
+
 void reverseIntake() { intakePosition = !intakePosition; }
 
 bool doIntakeOut = false;
@@ -111,4 +119,13 @@ void intakeToggle() {
   } else {
     intake.stop();
   }
+}
+
+
+
+/*-----------
+EXPANSION
+------------*/
+void doExpansion() {
+  
 }
