@@ -126,6 +126,14 @@ void intakeToggle() {
 /*-----------
 EXPANSION
 ------------*/
-void doExpansion() {
-  
+// function that is called back to do tasks
+void excecuteExpansion() {
+  ExpansionLeft.set(1); // activate the pneumatic to activate expansion.
 }
+
+// function called into main.cpp that uses a callback.
+void doExpansion() {
+  controller1.ButtonA.pressed(excecuteExpansion);
+}
+
+
