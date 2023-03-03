@@ -9,6 +9,9 @@ void SetTimeout(int mSec) {
   AllRight.setTimeout(mSec, msec);
 }
 
+double velocityRightAdjust = 0;
+double velocityLeftAdjust = 0;
+
 void moveForward(float distanceCM, int speedPct, int timeout) {
   SetTimeout(timeout);
   AllLeft.setVelocity(speedPct, pct);
@@ -75,24 +78,16 @@ void IntakeSpitAuto(float turnDegree, int speedPct, int timeout) {
 long int prevValueAuton = -1;
 bool catapultWindAuton = true;
 void windCatapultAuton() {
-  if (catapultLimit.value() == prevValueAuton) {
+  while (prevValueAuton == catapultLimit.value()) {
     thrower.spin(reverse, 100, pct);
-  } else {
-    catapultWindAuton = !catapultWindAuton;
-    thrower.stop();
   }
+
+  thrower.stop();
 }
 
 void ShootCatapultAuto(int timeout) {
-  SetTimeout(timeout);
-  thrower.rotateFor(reverse, 480, deg, true);
-  thrower.setRotation(0, deg);
-  SetTimeout(0);
-  // SetTimeout(timeout);
-  // thrower.spinFor(reverse, 1200, msec);
-  // SetTimeout(0);
-  // catapultWindAuton = true;
-  // prevValueAuton = catapultLimit.value();
+  thrower.spinFor(reverse, 300, msec);
+  prevValueAuton = catapultLimit.value();
 }
 
 // void catapultLogic() {

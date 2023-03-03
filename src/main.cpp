@@ -24,6 +24,7 @@ void UserControl() {
   thrower.setVelocity(100, pct);
 
   while (true) {
+    // printf("\ntest: %li", catapultLimit.pressing());
     tankDrive();
     catapultLogic();
     intakeToggle();
@@ -33,7 +34,9 @@ void UserControl() {
 void Autonomous()
 {
   // Routine1Auton();
+  // Routine2Auton();
   Routine1Skills();
+  // Routine2Skills();
   // testAuton();
   // GPStest();
   // moveinBox();
