@@ -33,6 +33,10 @@ extern encoder encoder1;
 extern encoder encoder2;
 extern encoder cataswitch;
 
+// pneumatics
+extern digital_out ExpansionLeft;
+extern digital_out ExpansionRight;
+
 // GPS
 extern gps DrivetrainGPS;
 long map(long x, long in_min, long in_max, long out_min, long out_max);
