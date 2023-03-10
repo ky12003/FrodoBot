@@ -75,7 +75,7 @@ void InertialTurn(char dir, double speed, double DEGREES, double timeout) {
       }while(Inertial1.rotation(deg) > DEGREES);
   }
   else if(dir == 'l') {
-    while(Inertial1.rotation(deg)<DEGREES)
+    while(fabs(Inertial1.rotation(deg))<DEGREES)
     {
       AllLeft.spin(reverse, speed, pct);
       AllRight.spin(forward, speed, pct);
@@ -83,7 +83,7 @@ void InertialTurn(char dir, double speed, double DEGREES, double timeout) {
         do{
       AllLeft.spin(forward, 3, pct);
       AllRight.spin(reverse, 3, pct);
-    }while(Inertial1.rotation(deg)>DEGREES);
+    }while(fabs(Inertial1.rotation(deg))>DEGREES);
   }
   AllLeft.stop(hold);
   AllRight.stop(hold);
@@ -118,16 +118,18 @@ void IntakeSpitAuto(float turnDegree, int speedPct, int timeout) {
   SetTimeout(0);
 }
 
+// A function that winds the catapult up and stops after the limit switch is hit.
 long int prevValueAuton = -1;
 bool catapultWindAuton = true;
 void windCatapultAuton() {
-  while (prevValueAuton == catapultLimit.value()) {
+  do {
     thrower.spin(reverse, 100, pct);
-  }
+  } while (prevValueAuton == catapultLimit.value());
 
   thrower.stop();
 }
 
+// A function that shoots the catapult
 void ShootCatapultAuto(int timeout) {
   thrower.spinFor(reverse, 300, msec);
   prevValueAuton = catapultLimit.value();
