@@ -47,6 +47,9 @@ encoder cataswitch = encoder(Brain.ThreeWirePort.H);
 // Expansion systems using pneumatics (*left = left when looking from the back of the robot)
 digital_out ExpansionLeft = digital_out(Brain.ThreeWirePort.B);
 
+inertial Inertial1 = inertial(PORT17); // Under the catapult near the front of the bot
+// inertial Inertial2 = ; // 
+
 // digital_out ExpansionRight; // (*port/use still undetermined)
 
 // CONSTANTS

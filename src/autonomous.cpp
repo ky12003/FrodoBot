@@ -46,6 +46,49 @@ void TurninPlace(int turnDegree, int speedPct,
   SetTimeout(0);
 }
 
+// Helper function for InertialTurn (*NOTE: in the case 2 inertial sensors get added)
+// float inertialAverageDEG()
+// {
+//   float inertialSum=0;
+//   inertialSum=(fabs(Inertial1.rotation(deg))+fabs(Inertial2.rotation(deg)));
+//   inertialSum=inertialSum/2;
+//   return inertialSum;
+// }
+
+// Turn with inertial sensor. 
+//(dir): "r" or "l" for "right" or "left" respectively. (speed): turning speed in PERCENT. (DEGREES): turn in DEGREES. timeout: timeout in MSEC. 
+void InertialTurn(char dir, double speed, double DEGREES, double timeout) {
+  Inertial1.resetRotation();
+  // Inertial2.setHeading(0.05, deg);
+  // Inertial3.setHeading(0.05, deg); 
+  if(dir == 'r'){ //Right turning
+
+    while(Inertial1.rotation(deg)<DEGREES)
+    {
+      AllLeft.spin(forward, speed, pct);
+      AllRight.spin(reverse, speed, pct);
+
+    } 
+      do{
+        AllLeft.spin(reverse, 3, pct);
+        AllRight.spin(forward, 3, pct);
+      }while(Inertial1.rotation(deg) > DEGREES);
+  }
+  else if(dir == 'l') {
+    while(Inertial1.rotation(deg)<DEGREES)
+    {
+      AllLeft.spin(reverse, speed, pct);
+      AllRight.spin(forward, speed, pct);
+    }
+        do{
+      AllLeft.spin(forward, 3, pct);
+      AllRight.spin(reverse, 3, pct);
+    }while(Inertial1.rotation(deg)>DEGREES);
+  }
+  AllLeft.stop(hold);
+  AllRight.stop(hold);
+}
+
 /*-----
 SCORING
 ------*/

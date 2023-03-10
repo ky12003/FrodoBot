@@ -117,12 +117,13 @@ void Routine1Skills() {
   wait(300, msec);
   TurninPlace(-90, 15, 4000); // turn counterclockwise to adjust to the roller position
   wait(300, msec);
-  moveForward(-48, 15, 6000); // move backwards torwards the roller
+  moveForward(-52, 15, 6000); // move backwards torwards the roller
   wait(300, msec);
   IntakeSpitAuto(400, 70, 5000); // roll the roller
   wait(300, msec);
   moveForward(40, 40, 3000); // move forward for expansion
-  TurninPlace(70, 50, 3000); // turn to get the tiles
+  TurninPlace(-70, 50, 3000); // turn to get the tiles
+  ExpansionLeft.set(1); // shoot expansion
   // wait(200, msec);
   // moveForward(25, 60, 2000); // move forward slightly to get more tiles
 }
@@ -170,12 +171,7 @@ TEST AUTONS
 --*/
 void testAuton() {
   // printf("test");
-  windCatapultAuton();
-  wait(300, msec);
-  moveForward(20, 40, 3000);
-  ShootCatapultAuto(3000);
-  wait(300, msec); 
-  windCatapultAuton();
+  InertialTurn('r', 40, 90, 6000);
 }
 
 void GPStest() { DriveToTargetXY(1, 1, 5, 10); }
