@@ -46,6 +46,18 @@ void TurninPlace(int turnDegree, int speedPct,
   SetTimeout(0);
 }
 
+// Helper function for InertialTurn (*NOTE: in the case 2 inertial sensors get added)
+// float inertialAverageDEG()
+// {
+//   float inertialSum=0;
+//   inertialSum=(fabs(Inertial1.rotation(deg))+fabs(Inertial2.rotation(deg)));
+//   inertialSum=inertialSum/2;
+//   return inertialSum;
+// }
+
+// Turning function that uses the inertial sensor
+
+
 /*-----
 SCORING
 ------*/
