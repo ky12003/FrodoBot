@@ -171,12 +171,7 @@ TEST AUTONS
 --*/
 void testAuton() {
   // printf("test");
-  windCatapultAuton();
-  wait(300, msec);
-  moveForward(20, 40, 3000);
-  ShootCatapultAuto(3000);
-  wait(300, msec); 
-  windCatapultAuton();
+  InertialTurn('r', 40, 90, 6000);
 }
 
 void GPStest() { DriveToTargetXY(1, 1, 5, 10); }
