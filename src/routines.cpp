@@ -173,7 +173,11 @@ TEST AUTONS
 --*/
 void testAuton() {
   // printf("test");
-  InertialTurn('l', 40, 90, 6000);
+  // moveForward(20, 5, 5000);
+  // InertialTurn('r', 40, 90, 6000);
+  moveForwardPID(60.0, fwd);
+  // wait(1000, msec);
+  // InertialTurn('r', 20, 90, 3000);
 }
 
 void GPStest() { DriveToTargetXY(1, 1, 5, 10); }

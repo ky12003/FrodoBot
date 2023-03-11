@@ -1,17 +1,29 @@
 #include "vex.h"
 #include "Autonomous.h"
+// #include <string>
 
 /*----------
+/////////////////////
+
 MOVEMENT
+
+////////////////////
 ----------*/
+
+////////
+// Set tmeout for both motors
+////////
 void SetTimeout(int mSec) {
   AllLeft.setTimeout(mSec, msec);
   AllRight.setTimeout(mSec, msec);
 }
 
-double velocityRightAdjust = 0;
-double velocityLeftAdjust = 0;
+// double velocityRightAdjust = 0;
+// double velocityLeftAdjust = 0;
 
+////////
+// (w/brute force) move forwards or backwards depending on input (positive value: forwards, negative value: backwards)
+////////
 void moveForward(float distanceCM, int speedPct, int timeout) {
   SetTimeout(timeout);
   AllLeft.setVelocity(speedPct, pct);
@@ -19,15 +31,18 @@ void moveForward(float distanceCM, int speedPct, int timeout) {
   // (GEAR RATIO IS ONE-TO-ONE, so the "distance" would be times 1)
   // AllRight.rotateFor(forward, (distanceCM/WHEEL_CIRCUMFERENCE) *
   // DRIVE_GEAR_RATIO, rev, false);
-  AllMotors.rotateFor(forward,
-                      (distanceCM / WHEEL_CIRCUMFERENCE) * DRIVE_GEAR_RATIO,
-                      rev, true);
+  double distanceToTravel = (distanceCM / WHEEL_CIRCUMFERENCE) * DRIVE_GEAR_RATIO;
+
+  AllMotors.rotateFor(forward, distanceToTravel, rev, true);
+  
+  //Brain.Screen.printAt(30, 30, "TESTING: %f \n", left1.rotation(deg)*(3.1415926535/180)*(6.985/2));
   SetTimeout(0);
 }
 
-void TurninPlace(int turnDegree, int speedPct,
-                 int timeout) // a postitve number will turn right, a negative
-                              // number will turn left//
+////////
+// Brute force turn (positive turn degree: clockwise, negative turn degree: counterclockwise)
+////////
+void TurninPlace(int turnDegree, int speedPct, int timeout)
 {
   SetTimeout(timeout);
   AllLeft.setVelocity(speedPct, pct);
@@ -44,6 +59,109 @@ void TurninPlace(int turnDegree, int speedPct,
           DRIVE_GEAR_RATIO,
       rev);
   SetTimeout(0);
+}
+
+////////
+// SETTINGS FOR PID
+////////
+// ------FOR REGULAR LATERAL MOVEMENT-------
+// constant values for adjusting error.
+double pGain = 0.003;    // proportional gain constant
+double iGain = 0.002;    // integral gain constant
+double dGain = 0.001;    // derivative gain constant
+// setup variables
+double desiredDistanceCM; // variable for storing the desired distance to travel (in centimeters)
+double error; // current error (Sensor Value - Desired Value)
+double prevError; // error 20 milliseconds ago
+double errorSum; // cumilative error throughout a given run
+double derivative; 
+directionType desiredMoveDir; // which way to move (forwards or backwards)
+
+// ------FOR TURNING MOVEMENT------
+// constant values for adjusting error
+double pGainTurn = 0.003; // proportional gain constant
+double iGainTurn = 0.002; // integral gain constant
+double dGainTurn = 0.001; // derivative gain constant
+// setup variables
+double desiredTurn = 0; // desired turn angle (want to drive straight, so 0)
+double errorTurn; // current error (Sensor Value - Desired Value)
+double prevErrorTurn; // error 20 milliseconds ago
+double errorSumTurn; // cumilative error throughout a given run
+double turnDerivative;
+
+// ------ MISC --------
+// bool doPID = false;
+
+
+/////////
+// CALLBACK PID FUNCTION/PID SETTINGS (*USED REFERENCE FROM: https://www.youtube.com/watch?v=D0H4t4n5J6k AND https://www.youtube.com/watch?v=_Itn-0d340g)
+/////////
+int PIDMove() {
+  
+  //------------ PID LOOP --------------
+  // while the error is not negligible
+  while (error > 0.1) {
+    /*--
+    LATERAL MOVEMENT
+    --*/
+    double positionLeft = left1.rotation(deg)*(3.1415926535/180)*(6.985/2);  // get current distance traveled from LEFT encoder
+    double positionRight = right1.rotation(deg)*(3.1415926535/180)*(6.985/2);  // get current distance traveled from RIGHT encoder
+    double positionAVG = (positionLeft + positionRight)/2; // average of the two encoder positions
+
+    error = desiredDistanceCM - positionAVG; // Potential
+
+    derivative = error - prevError; // Derivative
+    errorSum += error; // Integral
+
+    double lateralMotorPower = error*pGain + derivative*dGain + errorSum*iGain;
+
+    /*--
+    TURN MOVEMENT
+    --*/
+    double turnDifference = positionLeft - positionRight;
+
+    errorTurn = turnDifference - desiredTurn; // Potential
+    turnDerivative = errorTurn - prevErrorTurn; // Derivative
+    errorSumTurn += errorTurn; // Integral
+
+    double turnMotorPower = errorTurn*pGainTurn + turnDerivative*dGainTurn + errorSumTurn*iGainTurn;
+
+
+    // Brain.Screen.printAt(30, 40, "ERR: %f", error);
+    // Brain.Screen.printAt(30, 60, "POWAOOOOONE: %f", lateralMotorPower);
+    // Brain.Screen.printAt(30, 80, "POWATWWWWWWO: %f", turnMotorPower);
+    /*--
+    SETUP FOR NEXT LOOP/SPINNING MOTORS
+    --*/
+    // spin the motors
+    AllLeft.spin(desiredMoveDir, lateralMotorPower + turnMotorPower, voltageUnits::volt);
+    AllRight.spin(desiredMoveDir, lateralMotorPower - turnMotorPower, voltageUnits::volt);
+
+    prevError = error;
+    prevErrorTurn = errorTurn;
+
+    vex::task::sleep(20);
+  }
+
+  AllMotors.stop();
+  return 1;
+}
+////////
+// set task up for PID w/ initial variables
+///////
+void moveForwardPID(double distanceCM, directionType dir) {
+  Brain.Screen.printAt(30, 30, "TESTING: %f \n", left1.rotation(deg)*(3.1415926535/180)*(6.985/2));
+
+  // setup
+  left1.resetRotation(); // initialize distance travelled as "0"
+  right1.resetRotation(); // initialize distance travelled as "0"
+  prevError = 0; // initialize prevError
+  desiredDistanceCM = distanceCM; // initialize distance goal
+  error = desiredDistanceCM; // initialize current error
+  desiredMoveDir = dir; //initialize desired direction
+
+  //desiredDistanceCM - left1.rotation(deg)*(3.1415926535/180)*(6.985/2);
+  vex::task pidTASK(PIDMove);
 }
 
 // Helper function for InertialTurn (*NOTE: in the case 2 inertial sensors get added)
@@ -90,7 +208,11 @@ void InertialTurn(char dir, double speed, double DEGREES, double timeout) {
 }
 
 /*-----
+/////////////////////
+
 SCORING
+
+/////////////////////
 ------*/
 
 void IntakeAuto(int timeout) {
@@ -150,39 +272,39 @@ void ShootCatapultAuto(int timeout) {
 //   catapult.spin(forward);
 // }
 
-void moveForwardPID(int speedPct) {
+// void moveForwardPID(int speedPct) {
 
-  int encPositionLeft;
-  int encPositionRight;
-  int error = 0;
-  int modifiedError;
-  float kp = 0.1;
+//   int encPositionLeft;
+//   int encPositionRight;
+//   int error = 0;
+//   int modifiedError;
+//   float kp = 0.1;
 
-  AllLeft.resetPosition();
-  AllRight.resetPosition();
-  // double errorPositionLeft = targetPosition- encPositionLeft;
-  // double errorPositionRight = targetPosition - encPositionRight;
-  while (true) {
+//   AllLeft.resetPosition();
+//   AllRight.resetPosition();
+//   // double errorPositionLeft = targetPosition- encPositionLeft;
+//   // double errorPositionRight = targetPosition - encPositionRight;
+//   while (true) {
 
-    encPositionLeft = AllLeft.position(deg);
-    encPositionRight = AllRight.position(deg);
-    error = encPositionLeft - encPositionRight;
-    modifiedError = int(kp * error);
-    printf("%d %d \n", encPositionLeft, encPositionRight);
-    wait(50, msec);
+//     encPositionLeft = AllLeft.position(deg);
+//     encPositionRight = AllRight.position(deg);
+//     error = encPositionLeft - encPositionRight;
+//     modifiedError = int(kp * error);
+//     printf("%d %d \n", encPositionLeft, encPositionRight);
+//     wait(50, msec);
 
-    if (error > 100) {
-      error = 100;
-    } else if (error < -100) {
-      error = -100;
-    }
-    AllLeft.spin(forward, speedPct - modifiedError, pct);
-    AllRight.spin(forward, speedPct + modifiedError, pct);
-  }
+//     if (error > 100) {
+//       error = 100;
+//     } else if (error < -100) {
+//       error = -100;
+//     }
+//     AllLeft.spin(forward, speedPct - modifiedError, pct);
+//     AllRight.spin(forward, speedPct + modifiedError, pct);
+//   }
 
-  // if ((abs(errorPositionLeft) > 5) || (abs(errorPositionRight) > 5)) {
-  // }
-}
+//   // if ((abs(errorPositionLeft) > 5) || (abs(errorPositionRight) > 5)) {
+//   // }
+// }
 
 // void moveForwardPID() {
 
