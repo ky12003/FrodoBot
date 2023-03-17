@@ -71,11 +71,10 @@ double iGain = 0.002;    // integral gain constant
 double dGain = 0.001;    // derivative gain constant
 // setup variables
 double desiredDistanceCM; // variable for storing the desired distance to travel (in centimeters)
-double error; // current error (Sensor Value - Desired Value)
+double error = 0; // current error (Sensor Value - Desired Value)
 double prevError; // error 20 milliseconds ago
 double errorSum; // cumilative error throughout a given run
 double derivative; 
-directionType desiredMoveDir; // which way to move (forwards or backwards)
 
 // ------FOR TURNING MOVEMENT------
 // constant values for adjusting error
@@ -83,8 +82,8 @@ double pGainTurn = 0.003; // proportional gain constant
 double iGainTurn = 0.002; // integral gain constant
 double dGainTurn = 0.001; // derivative gain constant
 // setup variables
-double desiredTurn = 0; // desired turn angle (want to drive straight, so 0)
-double errorTurn; // current error (Sensor Value - Desired Value)
+double desiredTurnDEG; // desired turn angle (want to drive straight, so 0)
+double errorTurn = 0; // current error (Sensor Value - Desired Value)
 double prevErrorTurn; // error 20 milliseconds ago
 double errorSumTurn; // cumilative error throughout a given run
 double turnDerivative;
@@ -100,42 +99,38 @@ int PIDMove() {
   
   //------------ PID LOOP --------------
   // while the error is not negligible
-  while (error > 0.1) {
+  while (fabs(error) > 0.1 || fabs(errorTurn) > 0.1) {
     /*--
     LATERAL MOVEMENT
     --*/
-    double positionLeft = left1.rotation(deg)*(3.1415926535/180)*(6.985/2);  // get current distance traveled from LEFT encoder
-    double positionRight = right1.rotation(deg)*(3.1415926535/180)*(6.985/2);  // get current distance traveled from RIGHT encoder
-    double positionAVG = (positionLeft + positionRight)/2; // average of the two encoder positions
+    float positionLeft = left1.rotation(deg)*(3.1415926535/180)*(6.985/2);  // get current distance traveled from LEFT encoder (in centimeters)
+    float positionRight = right1.rotation(deg)*(3.1415926535/180)*(6.985/2);  // get current distance traveled from RIGHT encoder (in centimeters)
+    float positionAVG = (positionLeft + positionRight)/2; // average of the two encoder positions
 
     error = desiredDistanceCM - positionAVG; // Potential
-
     derivative = error - prevError; // Derivative
     errorSum += error; // Integral
 
-    double lateralMotorPower = error*pGain + derivative*dGain + errorSum*iGain;
+    float lateralMotorPower = error*pGain + derivative*dGain + errorSum*iGain; // PID calculation
 
     /*--
     TURN MOVEMENT
     --*/
-    double turnDifference = positionLeft - positionRight;
+    float currTurn = Inertial1.rotation(deg); // get the current rotation angle
 
-    errorTurn = turnDifference - desiredTurn; // Potential
+    errorTurn = currTurn - desiredTurnDEG; // Potential
     turnDerivative = errorTurn - prevErrorTurn; // Derivative
     errorSumTurn += errorTurn; // Integral
 
-    double turnMotorPower = errorTurn*pGainTurn + turnDerivative*dGainTurn + errorSumTurn*iGainTurn;
+    float turnMotorPower = errorTurn*pGainTurn + turnDerivative*dGainTurn + errorSumTurn*iGainTurn; // PID calculation
 
-
-    // Brain.Screen.printAt(30, 40, "ERR: %f", error);
-    // Brain.Screen.printAt(30, 60, "POWAOOOOONE: %f", lateralMotorPower);
-    // Brain.Screen.printAt(30, 80, "POWATWWWWWWO: %f", turnMotorPower);
+    Brain.Screen.printAt(30, 30, "TEST");
     /*--
     SETUP FOR NEXT LOOP/SPINNING MOTORS
     --*/
     // spin the motors
-    AllLeft.spin(desiredMoveDir, lateralMotorPower + turnMotorPower, voltageUnits::volt);
-    AllRight.spin(desiredMoveDir, lateralMotorPower - turnMotorPower, voltageUnits::volt);
+    AllLeft.spin(fwd, lateralMotorPower + turnMotorPower, voltageUnits::volt);
+    AllRight.spin(fwd, lateralMotorPower - turnMotorPower, voltageUnits::volt);
 
     prevError = error;
     prevErrorTurn = errorTurn;
@@ -146,23 +141,45 @@ int PIDMove() {
   AllMotors.stop();
   return 1;
 }
+
 ////////
-// set task up for PID w/ initial variables
+// set task up for MOVE PID w/ initial variables
 ///////
-void moveForwardPID(double distanceCM, directionType dir) {
+void moveForwardPID(float distanceCM) {
   Brain.Screen.printAt(30, 30, "TESTING: %f \n", left1.rotation(deg)*(3.1415926535/180)*(6.985/2));
 
   // setup
   left1.resetRotation(); // initialize distance travelled as "0"
   right1.resetRotation(); // initialize distance travelled as "0"
+  Inertial1.resetRotation(); // initialize turn angle as "0"
   prevError = 0; // initialize prevError
   desiredDistanceCM = distanceCM; // initialize distance goal
+  desiredTurnDEG = 0; // initialize turn goal (as 0 since goal is straight movement)
   error = desiredDistanceCM; // initialize current error
-  desiredMoveDir = dir; //initialize desired direction
-
   //desiredDistanceCM - left1.rotation(deg)*(3.1415926535/180)*(6.985/2);
+  
+  // callback
   vex::task pidTASK(PIDMove);
 }
+
+////////
+// set task up for TURN PID w/ initial variables
+///////
+void turnPID(float rotationDEG) {
+  // setup
+  left1.resetRotation(); // initialize distance travelled as "0"
+  right1.resetRotation(); // initialize distance travelled as "0"
+  Inertial1.resetRotation(); // initialize turn angle as "0"
+  prevErrorTurn = 0; // initialize prevError
+  desiredDistanceCM = 0; // initialize distance goal (as 0 since turning in place)
+  desiredTurnDEG = rotationDEG; // initialize turn goal 
+  errorTurn = desiredTurnDEG; // initialize current error
+  //desiredDistanceCM - left1.rotation(deg)*(3.1415926535/180)*(6.985/2);
+  
+  // callback
+  vex::task pidTASK(PIDMove);
+}
+
 
 // Helper function for InertialTurn (*NOTE: in the case 2 inertial sensors get added)
 // float inertialAverageDEG()

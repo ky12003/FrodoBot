@@ -173,9 +173,10 @@ TEST AUTONS
 --*/
 void testAuton() {
   // printf("test");
+  // moveForwardPID(40);
   // moveForward(20, 5, 5000);
   // InertialTurn('r', 40, 90, 6000);
-  moveForwardPID(60.0, fwd);
+  turnPID(90);
   // wait(1000, msec);
   // InertialTurn('r', 20, 90, 3000);
 }
