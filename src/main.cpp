@@ -29,6 +29,7 @@ void UserControl() {
     catapultLogic();
     intakeToggle();
     doExpansion();
+    spinRollerOpticalBlue();
     // printf("\ntest: %li", catapultBumper.value());
   }
 }

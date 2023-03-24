@@ -14,6 +14,10 @@ void doExpansion();
 // void manualWindUp();
 // void manualStopThrower();
 
+// roller w/ optical
+void spinRollerOpticalBlue();
+void spinRollerOpticalRed();
+
 // helper functions for catapult
 void windUp();
 void shootDisks();
