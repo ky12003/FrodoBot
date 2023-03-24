@@ -152,6 +152,15 @@ int PIDMove() {
   return 1;
 }
 
+void resetValuesPID() {
+  pidDone = false;
+  left1.resetRotation(); // initialize distance travelled as "0"
+  right1.resetRotation(); // initialize distance travelled as "0"
+  Inertial1.resetRotation(); // initialize turn angle as "0"
+  prevError = 0; // initialize prevError
+  prevErrorTurn = 0; // initialize prevError
+}
+
 ////////
 // set task up for MOVE PID w/ initial variables
 ///////
@@ -159,15 +168,10 @@ void moveForwardPID(float distanceCM) {
   Brain.Screen.printAt(30, 30, "TESTING: %f \n", left1.rotation(deg)*(3.1415926535/180)*(6.985/2));
 
   // setup
-  pidDone = false;
-  left1.resetRotation(); // initialize distance travelled as "0"
-  right1.resetRotation(); // initialize distance travelled as "0"
-  Inertial1.resetRotation(); // initialize turn angle as "0"
-  prevError = 0; // initialize prevError
+  resetValuesPID();
   desiredDistanceCM = distanceCM; // initialize distance goal
   desiredTurnDEG = 0; // initialize turn goal (as 0 since goal is straight movement)
   error = desiredDistanceCM; // initialize current error
-  //desiredDistanceCM - left1.rotation(deg)*(3.1415926535/180)*(6.985/2);
   
   // callback
   vex::task pidTASK(PIDMove);
@@ -176,20 +180,16 @@ void moveForwardPID(float distanceCM) {
 ////////
 // set task up for TURN PID w/ initial variables
 ///////
-void turnPID(float rotationDEG) {
-  // setup
-  left1.resetRotation(); // initialize distance travelled as "0"
-  right1.resetRotation(); // initialize distance travelled as "0"
-  Inertial1.resetRotation(); // initialize turn angle as "0"
-  prevErrorTurn = 0; // initialize prevError
-  desiredDistanceCM = 0; // initialize distance goal (as 0 since turning in place)
-  desiredTurnDEG = rotationDEG; // initialize turn goal 
-  errorTurn = desiredTurnDEG; // initialize current error
-  //desiredDistanceCM - left1.rotation(deg)*(3.1415926535/180)*(6.985/2);
+// void turnPID(float rotationDEG) {
+//   // setup
+//   resetValuesPID();
+//   desiredDistanceCM = 0; // initialize distance goal (as 0 since turning in place)
+//   desiredTurnDEG = rotationDEG; // initialize turn goal 
+//   errorTurn = desiredTurnDEG; // initialize current error
   
-  // callback
-  vex::task pidTASK(PIDMove);
-}
+//   // callback
+//   vex::task pidTASK(PIDMove);
+// }
 
 
 // Helper function for InertialTurn (*NOTE: in the case 2 inertial sensors get added)
