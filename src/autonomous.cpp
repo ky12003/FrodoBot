@@ -258,12 +258,11 @@ void IntakeSpitAuto(float turnDegree, int speedPct, int timeout) {
 }
 
 // A function that winds the catapult up and stops after the limit switch is hit.
-long int prevValueAuton = -1;
 bool catapultWindAuton = true;
 void windCatapultAuton() {
   do {
     thrower.spin(reverse, 100, pct);
-  } while (prevValueAuton == catapultLimit.value());
+  } while (catapultLimit.pressing());
 
   thrower.stop();
 }
@@ -271,7 +270,6 @@ void windCatapultAuton() {
 // A function that shoots the catapult
 void ShootCatapultAuto(int timeout) {
   thrower.spinFor(reverse, 300, msec);
-  prevValueAuton = catapultLimit.value();
 }
 
 // void catapultLogic() {

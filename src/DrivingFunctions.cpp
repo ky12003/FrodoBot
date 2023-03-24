@@ -23,7 +23,7 @@ void arcadeDrive()
 
 void tankDrive()
 {
-  printf("test: %f", Inertial1.rotation(deg));
+  // printf("test: %f", Inertial1.rotation(deg));
   if (abs(controller1.Axis2.value()) > 10 || abs(controller1.Axis3.value()) > 10)
   {
     AllRight.spin(forward, (controller1.Axis2.value()) * 0.5, pct);
