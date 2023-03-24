@@ -22,8 +22,9 @@ extern optical rollerOptical;
 //catapult motor
 extern motor thrower;
 extern limit catapultLimit;
-extern bumper catapultBumper;
-extern sonar throwerSonar;
+extern optical OpticalSensor;
+// extern bumper catapultBumper;
+// extern sonar throwerSonar;
 
 //motor groups
 extern motor_group AllLeft;

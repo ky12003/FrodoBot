@@ -75,7 +75,6 @@ double error; // current error (Sensor Value - Desired Value)
 double prevError; // error 20 milliseconds ago
 double errorSum; // cumilative error throughout a given run
 double derivative; 
-directionType desiredMoveDir; // which way to move (forwards or backwards)
 
 // ------FOR TURNING MOVEMENT------
 // constant values for adjusting error
@@ -100,7 +99,7 @@ int PIDMove() {
   
   //------------ PID LOOP --------------
   // while the error is not negligible
-  while (error > 0.1) {
+  while (fabs(error) > 0.1) {
     /*--
     LATERAL MOVEMENT
     --*/
@@ -134,8 +133,8 @@ int PIDMove() {
     SETUP FOR NEXT LOOP/SPINNING MOTORS
     --*/
     // spin the motors
-    AllLeft.spin(desiredMoveDir, lateralMotorPower + turnMotorPower, voltageUnits::volt);
-    AllRight.spin(desiredMoveDir, lateralMotorPower - turnMotorPower, voltageUnits::volt);
+    AllLeft.spin(fwd, lateralMotorPower + turnMotorPower, voltageUnits::volt);
+    AllRight.spin(fwd, lateralMotorPower - turnMotorPower, voltageUnits::volt);
 
     prevError = error;
     prevErrorTurn = errorTurn;
@@ -149,7 +148,7 @@ int PIDMove() {
 ////////
 // set task up for PID w/ initial variables
 ///////
-void moveForwardPID(double distanceCM, directionType dir) {
+void moveForwardPID(double distanceCM) {
   Brain.Screen.printAt(30, 30, "TESTING: %f \n", left1.rotation(deg)*(3.1415926535/180)*(6.985/2));
 
   // setup
@@ -158,7 +157,6 @@ void moveForwardPID(double distanceCM, directionType dir) {
   prevError = 0; // initialize prevError
   desiredDistanceCM = distanceCM; // initialize distance goal
   error = desiredDistanceCM; // initialize current error
-  desiredMoveDir = dir; //initialize desired direction
 
   //desiredDistanceCM - left1.rotation(deg)*(3.1415926535/180)*(6.985/2);
   vex::task pidTASK(PIDMove);
@@ -238,6 +236,29 @@ void IntakeSpitAuto(float turnDegree, int speedPct, int timeout) {
 
   intake.rotateFor(forward, turnDegree, deg, false);
   SetTimeout(0);
+}
+
+void RollerAuto(vex::color desiredColor) {
+
+  OpticalSensor.setLightPower(100, pct);// itk this is the light, if so set to 0 then testing, 100
+  while (!OpticalSensor.isNearObject())
+  { printf("TEST!@: %i", OpticalSensor.isNearObject());
+    AllMotors.spin(reverse, 5, pct);
+  } 
+
+  wait(400, msec);
+
+  AllMotors.stop();
+  //checks if sensor is near roller
+  do // is going to do 
+  {
+      intake.spin(fwd, 30, pct); //fwd is going to spin intake roller if the top statement is true
+  }
+  while (OpticalSensor.color() != desiredColor); // while the 2nd statement is true it is going to changes to opposite color, blue = red, red = blue
+  
+  intake.stop();// this will stop the roller if the if statement is true and has changed correctly to the opposite color 
+  OpticalSensor.setLightPower(0, pct);
+
 }
 
 // A function that winds the catapult up and stops after the limit switch is hit.
