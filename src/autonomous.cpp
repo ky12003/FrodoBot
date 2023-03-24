@@ -2,6 +2,11 @@
 #include "Autonomous.h"
 // #include <string>
 
+
+//--------- Toggle variables ----------
+bool pidDone = false;
+bool doIntake = false;
+
 /*----------
 /////////////////////
 
@@ -24,7 +29,7 @@ void SetTimeout(int mSec) {
 ////////
 // (w/brute force) move forwards or backwards depending on input (positive value: forwards, negative value: backwards)
 ////////
-void moveForward(float distanceCM, int speedPct, int timeout) {
+void moveForward(float distanceCM, int speedPct, int timeout, bool enableIntakeREG) {
   SetTimeout(timeout);
   AllLeft.setVelocity(speedPct, pct);
   AllRight.setVelocity(speedPct, pct);
@@ -33,8 +38,13 @@ void moveForward(float distanceCM, int speedPct, int timeout) {
   // DRIVE_GEAR_RATIO, rev, false);
   double distanceToTravel = (distanceCM / WHEEL_CIRCUMFERENCE) * DRIVE_GEAR_RATIO;
 
+  if (enableIntakeREG) {
+    intake.spin(directionType::rev, 100, pct);
+  }
+
   AllMotors.rotateFor(forward, distanceToTravel, rev, true);
   
+  intake.stop();
   //Brain.Screen.printAt(30, 30, "TESTING: %f \n", left1.rotation(deg)*(3.1415926535/180)*(6.985/2));
   SetTimeout(0);
 }
@@ -71,19 +81,19 @@ double iGain = 0.002;    // integral gain constant
 double dGain = 0.001;    // derivative gain constant
 // setup variables
 double desiredDistanceCM; // variable for storing the desired distance to travel (in centimeters)
-double error; // current error (Sensor Value - Desired Value)
+double error = 0; // current error (Sensor Value - Desired Value)
 double prevError; // error 20 milliseconds ago
 double errorSum; // cumilative error throughout a given run
 double derivative; 
 
 // ------FOR TURNING MOVEMENT------
 // constant values for adjusting error
-double pGainTurn = 0.003; // proportional gain constant
-double iGainTurn = 0.002; // integral gain constant
-double dGainTurn = 0.001; // derivative gain constant
+double pGainTurn = 0.03; // proportional gain constant
+double iGainTurn = 0.02; // integral gain constant
+double dGainTurn = 0.01; // derivative gain constant
 // setup variables
-double desiredTurn = 0; // desired turn angle (want to drive straight, so 0)
-double errorTurn; // current error (Sensor Value - Desired Value)
+double desiredTurnDEG; // desired turn angle (want to drive straight, so 0)
+double errorTurn = 0; // current error (Sensor Value - Desired Value)
 double prevErrorTurn; // error 20 milliseconds ago
 double errorSumTurn; // cumilative error throughout a given run
 double turnDerivative;
@@ -98,69 +108,101 @@ double turnDerivative;
 int PIDMove() {
   
   //------------ PID LOOP --------------
+  if (doIntake) {
+    intake.spin(directionType::rev, 100, pct);
+  }
+
   // while the error is not negligible
-  while (fabs(error) > 0.1) {
+  while ((error > 0.3 && desiredDistanceCM > 0) || (error < -0.3 && desiredDistanceCM < 0)) {
     /*--
     LATERAL MOVEMENT
     --*/
-    double positionLeft = left1.rotation(deg)*(3.1415926535/180)*(6.985/2);  // get current distance traveled from LEFT encoder
-    double positionRight = right1.rotation(deg)*(3.1415926535/180)*(6.985/2);  // get current distance traveled from RIGHT encoder
-    double positionAVG = (positionLeft + positionRight)/2; // average of the two encoder positions
+    printf("TEST#$@#: %f\n", error);
+    printf("TOOORUN: %f\n", errorTurn);
+    
+    float positionLeft = left1.rotation(deg)*(3.1415926535/180)*(6.82625);  // get current distance traveled from LEFT encoder (in centimeters)
+    float positionRight = right1.rotation(deg)*(3.1415926535/180)*(6.82625);  // get current distance traveled from RIGHT encoder (in centimeters)
+    float positionAVG = (positionLeft + positionRight)/2; // average of the two encoder positions
 
+    printf("DIST: %f\n", positionAVG);
     error = desiredDistanceCM - positionAVG; // Potential
-
     derivative = error - prevError; // Derivative
     errorSum += error; // Integral
 
-    double lateralMotorPower = error*pGain + derivative*dGain + errorSum*iGain;
+    float lateralMotorPower = error*pGain + derivative*dGain + errorSum*iGain; // PID calculation
 
     /*--
     TURN MOVEMENT
     --*/
-    double turnDifference = positionLeft - positionRight;
+    float currTurn = Inertial1.rotation(deg); // get the current rotation angle
 
-    errorTurn = turnDifference - desiredTurn; // Potential
+    errorTurn = currTurn - desiredTurnDEG; // Potential
     turnDerivative = errorTurn - prevErrorTurn; // Derivative
     errorSumTurn += errorTurn; // Integral
 
-    double turnMotorPower = errorTurn*pGainTurn + turnDerivative*dGainTurn + errorSumTurn*iGainTurn;
+    float turnMotorPower = errorTurn*pGainTurn + turnDerivative*dGainTurn + errorSumTurn*iGainTurn; // PID calculation
 
-
-    // Brain.Screen.printAt(30, 40, "ERR: %f", error);
-    // Brain.Screen.printAt(30, 60, "POWAOOOOONE: %f", lateralMotorPower);
-    // Brain.Screen.printAt(30, 80, "POWATWWWWWWO: %f", turnMotorPower);
+    Brain.Screen.printAt(30, 30, "TEST");
     /*--
     SETUP FOR NEXT LOOP/SPINNING MOTORS
     --*/
     // spin the motors
-    AllLeft.spin(fwd, lateralMotorPower + turnMotorPower, voltageUnits::volt);
-    AllRight.spin(fwd, lateralMotorPower - turnMotorPower, voltageUnits::volt);
+    AllLeft.spin(fwd, lateralMotorPower - turnMotorPower, voltageUnits::volt);
+    AllRight.spin(fwd, lateralMotorPower + turnMotorPower, voltageUnits::volt);
 
     prevError = error;
     prevErrorTurn = errorTurn;
 
     vex::task::sleep(20);
-  }
+  } 
+
+  pidDone = true;
 
   AllMotors.stop();
+  intake.stop();
   return 1;
 }
+
+void resetValuesPID() {
+  pidDone = false;
+  left1.resetRotation(); // initialize distance travelled as "0"
+  right1.resetRotation(); // initialize distance travelled as "0"
+  Inertial1.resetRotation(); // initialize turn angle as "0"
+  prevError = 0; // initialize prevError
+  prevErrorTurn = 0; // initialize prevError
+}
+
 ////////
-// set task up for PID w/ initial variables
+// set task up for MOVE PID w/ initial variables
 ///////
-void moveForwardPID(double distanceCM) {
+void moveForwardPID(float distanceCM, bool enableIntakePID) {
   Brain.Screen.printAt(30, 30, "TESTING: %f \n", left1.rotation(deg)*(3.1415926535/180)*(6.985/2));
 
   // setup
-  left1.resetRotation(); // initialize distance travelled as "0"
-  right1.resetRotation(); // initialize distance travelled as "0"
-  prevError = 0; // initialize prevError
+  resetValuesPID();
   desiredDistanceCM = distanceCM; // initialize distance goal
+  desiredTurnDEG = 0; // initialize turn goal (as 0 since goal is straight movement)
   error = desiredDistanceCM; // initialize current error
-
-  //desiredDistanceCM - left1.rotation(deg)*(3.1415926535/180)*(6.985/2);
+  doIntake = enableIntakePID; // initialize switch for enabling/disabling intake during drive
+  
+  // callback
   vex::task pidTASK(PIDMove);
 }
+
+////////
+// set task up for TURN PID w/ initial variables
+///////
+// void turnPID(float rotationDEG) {
+//   // setup
+//   resetValuesPID();
+//   desiredDistanceCM = 0; // initialize distance goal (as 0 since turning in place)
+//   desiredTurnDEG = rotationDEG; // initialize turn goal 
+//   errorTurn = desiredTurnDEG; // initialize current error
+  
+//   // callback
+//   vex::task pidTASK(PIDMove);
+// }
+
 
 // Helper function for InertialTurn (*NOTE: in the case 2 inertial sensors get added)
 // float inertialAverageDEG()
@@ -177,6 +219,7 @@ void InertialTurn(char dir, double speed, double DEGREES, double timeout) {
   Inertial1.resetRotation();
   // Inertial2.setHeading(0.05, deg);
   // Inertial3.setHeading(0.05, deg); 
+  printf("TEST: %f\n", Inertial1.rotation(deg));
   if(dir == 'r'){ //Right turning
 
     while(Inertial1.rotation(deg)<DEGREES)
@@ -220,6 +263,9 @@ void IntakeAuto(int timeout) {
   intake.stop();
 }
 
+// 
+//--------*OLD FUNCTIONS FOR INTAKE/ROLLERS-----------
+//
 void IntakeSpitAutoTime(int mTime, int speedPct, int timeout) {
   // SetTimeout(timeout);
 
@@ -228,7 +274,6 @@ void IntakeSpitAutoTime(int mTime, int speedPct, int timeout) {
   intake.spinFor(reverse, mTime, msec);
   // SetTimeout(0);
 }
-
 void IntakeSpitAuto(float turnDegree, int speedPct, int timeout) {
   SetTimeout(timeout);
 
@@ -246,7 +291,7 @@ void RollerAuto(vex::color desiredColor) {
     AllMotors.spin(reverse, 5, pct);
   } 
 
-  wait(400, msec);
+  wait(300, msec);
 
   AllMotors.stop();
   //checks if sensor is near roller
@@ -254,7 +299,7 @@ void RollerAuto(vex::color desiredColor) {
   {
       intake.spin(fwd, 30, pct); //fwd is going to spin intake roller if the top statement is true
   }
-  while (OpticalSensor.color() != desiredColor); // while the 2nd statement is true it is going to changes to opposite color, blue = red, red = blue
+  while (OpticalSensor.color() == desiredColor); // while the 2nd statement is true it is going to changes to opposite color, blue = red, red = blue
   
   intake.stop();// this will stop the roller if the if statement is true and has changed correctly to the opposite color 
   OpticalSensor.setLightPower(0, pct);

@@ -21,12 +21,7 @@ void catapultLogic() {
   }
 
 // roller optical code
-// std::string s = "red";
-  // if (rollerOptical.isNearObject()) {
-  //   while (rollerOptical.color()) {
-  //     intake.spin(fwd, 10, pct);
-  //   }
-  // }
+
 
   // controller1.ButtonL1.pressed(manualWindUp);
   // controller1.ButtonL2.released(manualStopThrower);
@@ -57,20 +52,6 @@ void shootDisks() {
   catapultWind = true;
   // prevValue = catapultLimit.value();
 }
-
-// void intakeToggle() {
-//   if (intaking) {
-//     intake.stop();
-//   } else {
-//     if (intakePosition) {
-//       intake.spin(forward, 80, pct);
-//     }
-//     else {
-//         { intake.spin(reverse, 100, pct); }
-//       }
-//     }
-//     intaking = !intaking;
-//   }
 
 
 /*-----------
