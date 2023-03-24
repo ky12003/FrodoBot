@@ -135,7 +135,7 @@ void Routine2Skills() {
   wait(300, msec);
   InertialTurn('r', 20, 90, 4000); // Turn clockwise (right) 90 degrees towards the goal
   wait(300, msec);
-  moveForwardPID(155, false);             // go towards the basket to shoot (OLD: // moveForward(165, 20, 3000);)
+  moveForwardPID(185, false);             // go towards the basket to shoot (OLD: // moveForward(165, 20, 3000);)
   waitUntil(pidDone);
   wait(200, msec);
   InertialTurn('l', 20, 18, 4000); // turn the bot slightly to the left to face the basket
@@ -188,7 +188,7 @@ void Routine2Skills() {
   wait(300, msec);
   InertialTurn('l', 20, 90, 4000); // turn counterclockwise to adjust to the roller position
   wait(300, msec);
-  RollerAuto(blue);                // roll the roller
+  RollerAuto(red);                // roll the roller
   wait(300, msec);
   moveForwardPID(40, false);              // move forward for expansion (OLD: moveForward(40, 40, 3000);)
   waitUntil(pidDone);
@@ -205,7 +205,7 @@ TEST AUTONS
 --*/
 void testAuton() {
   // printf("test");
-  moveForward(50, 30, 3000);
+  // moveForward(50, 30, 3000);
   // RollerAuto(red);
   // wait(500, msec);
 
@@ -213,7 +213,7 @@ void testAuton() {
   // waitUntil(pidDone);
   // wait(300, msec);
   // InertialTurn('r', 20, 90, 6000);
-  // RollerAuto(blue);
+  RollerAuto(blue);
   // moveForwardPID(60.0, fwd);
   // wait(1000, msec);
   // InertialTurn('r', 20, 90, 3000);

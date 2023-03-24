@@ -291,7 +291,7 @@ void RollerAuto(vex::color desiredColor) {
     AllMotors.spin(reverse, 5, pct);
   } 
 
-  wait(400, msec);
+  wait(300, msec);
 
   AllMotors.stop();
   //checks if sensor is near roller
