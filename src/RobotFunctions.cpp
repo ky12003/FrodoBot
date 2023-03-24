@@ -101,7 +101,41 @@ void intakeToggle() {
   }
 }
 
+void spinRollerOpticalBlue() {
+  
+  if (controller1.ButtonL1.pressing()) {
+    OpticalSensor.setLightPower(100, pct);
+    do // is going to do 
+    {
+        intake.spin(fwd, 30, pct); //fwd is going to spin intake roller if the top statement is true
+    }
+    while (OpticalSensor.color() == blue); // while the 2nd statement is true it is going to changes to opposite color, blue = red, red = blue
+    
+    intake.stop();// this will stop the roller if the if statement is true and has changed correctly to the opposite color 
+    OpticalSensor.setLightPower(0, pct);
+  } else if (!doIntakeIn && !doIntakeOut) {
+    intake.stop();
+    OpticalSensor.setLightPower(0, pct);
+  }
+  
+}
 
+void spinRollerOpticalRed() {
+  if (controller1.ButtonL1.pressing()) {
+    OpticalSensor.setLightPower(100, pct);
+    do // is going to do 
+    {
+        intake.spin(fwd, 30, pct); //fwd is going to spin intake roller if the top statement is true
+    }
+    while (OpticalSensor.color() == red); // while the 2nd statement is true it is going to changes to opposite color, blue = red, red = blue
+    
+    intake.stop();// this will stop the roller if the if statement is true and has changed correctly to the opposite color 
+    OpticalSensor.setLightPower(0, pct);
+  } else if (!doIntakeIn && !doIntakeOut) {
+    intake.stop();
+    OpticalSensor.setLightPower(0, pct);
+  }
+}
 
 /*-----------
 EXPANSION
