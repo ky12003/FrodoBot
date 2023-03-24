@@ -40,9 +40,9 @@ long map(long x, long in_min, long in_max, long out_min, long out_max)
 }
 
 //since the encoder has two wires, it needs to be defined by two ports
-encoder encoderTop = encoder(Brain.ThreeWirePort.A);
-encoder encoderBottom = encoder(Brain.ThreeWirePort.B);
-encoder cataswitch = encoder(Brain.ThreeWirePort.H);
+// encoder encoderTop = encoder(Brain.ThreeWirePort.A);
+// encoder encoderBottom = encoder(Brain.ThreeWirePort.B);
+// encoder cataswitch = encoder(Brain.ThreeWirePort.H);
 
 // Expansion systems using pneumatics (*left = left when looking from the back of the robot)
 digital_out ExpansionLeft = digital_out(Brain.ThreeWirePort.B);

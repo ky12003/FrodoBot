@@ -10,7 +10,6 @@ using namespace vex;
 bool intaking = false;
 bool intakePosition = false;
 bool catapultWind = true;
-long int prevValue = -1;
 
 
 /*-----------
@@ -43,7 +42,7 @@ void manualStopThrower() { thrower.stop(); }
 
 void windUp() {
 
-  if (catapultLimit.value() == prevValue) {
+  if (!catapultLimit.pressing()) {
     thrower.spin(reverse, 100, pct);
   } else {
     catapultWind = !catapultWind;
@@ -56,7 +55,7 @@ void shootDisks() {
   thrower.spinFor(reverse, 800, msec);
   // thrower.setTimeout(0, msec);
   catapultWind = true;
-  prevValue = catapultLimit.value();
+  // prevValue = catapultLimit.value();
 }
 
 // void intakeToggle() {
