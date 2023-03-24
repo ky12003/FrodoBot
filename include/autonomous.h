@@ -11,10 +11,8 @@ void moveForward(float distanceCM, int speedPct, int timeout); //(int dist, int 
 
 void TurninPlace(int turnDegree, int speedPct, int timeout); //(int dist, int speed, int timeout(seconds))//
 
-void moveForwardPID(float distanceCM); // move forwards/backwards with PID.
-
-void turnPID(float rotationDEG);
-
+// move forwards/backwards with PID.
+void moveForwardPID(double distanceCM);
 
 // Turn with inertial sensor. 
 //(dir): "r" or "l" for "right" or "left" respectively. (speed): turning speed in PERCENT. (DEGREES): turn in DEGREES. timeout: timeout in MSEC. 
@@ -27,6 +25,7 @@ SCORING
 void IntakeSpitAutoTime(int mTime, int speedPct, int timeout);
 void IntakeSpitAuto(float turnDegree, int speedPct, int timeout);
 void IntakeAuto(int timeout);
+void RollerAuto(vex::color desiredColor);
 void windCatapultAuton();
 void ShootCatapultAuto(int timeout);
 

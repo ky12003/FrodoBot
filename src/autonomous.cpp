@@ -99,7 +99,7 @@ int PIDMove() {
   
   //------------ PID LOOP --------------
   // while the error is not negligible
-  while (fabs(error) > 0.1 || fabs(errorTurn) > 0.1) {
+  while (fabs(error) > 0.1) {
     /*--
     LATERAL MOVEMENT
     --*/
@@ -255,6 +255,29 @@ void IntakeSpitAuto(float turnDegree, int speedPct, int timeout) {
 
   intake.rotateFor(forward, turnDegree, deg, false);
   SetTimeout(0);
+}
+
+void RollerAuto(vex::color desiredColor) {
+
+  OpticalSensor.setLightPower(100, pct);// itk this is the light, if so set to 0 then testing, 100
+  while (!OpticalSensor.isNearObject())
+  { printf("TEST!@: %i", OpticalSensor.isNearObject());
+    AllMotors.spin(reverse, 5, pct);
+  } 
+
+  wait(400, msec);
+
+  AllMotors.stop();
+  //checks if sensor is near roller
+  do // is going to do 
+  {
+      intake.spin(fwd, 30, pct); //fwd is going to spin intake roller if the top statement is true
+  }
+  while (OpticalSensor.color() != desiredColor); // while the 2nd statement is true it is going to changes to opposite color, blue = red, red = blue
+  
+  intake.stop();// this will stop the roller if the if statement is true and has changed correctly to the opposite color 
+  OpticalSensor.setLightPower(0, pct);
+
 }
 
 // A function that winds the catapult up and stops after the limit switch is hit.

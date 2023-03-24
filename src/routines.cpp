@@ -38,9 +38,7 @@ void Routine3Auton() {
 }
 
 void Routine2Auton() {
-moveForward(-10, 70, 1000);
-  wait(200, msec);
-  IntakeSpitAuto(130, 50, 5000); // roll the roller
+  RollerAuto(blue);             // roll
   moveForward(20, 10, 5000);    // move forward away from the roller
   wait(800, msec);
   TurninPlace(85, 10, 4000); // turn clockwise towards the basket
@@ -131,41 +129,71 @@ void Routine1Skills() {
 }
 
 void Routine2Skills() {
-  moveForward(30, 40, 4000); // move forward towards the basket
+  RollerAuto(red);               // roll the roller
+  moveForward(13, 10, 5000);     // move forward away from the roller
   wait(300, msec);
-  TurninPlace(-25, 8, 3000); // turn to face basket
+  InertialTurn('r', 30, 87, 4000); // Turn clockwise (right) 90 degrees towards the goal
   wait(300, msec);
-  windCatapultAuton();
+  moveForward(165, 20, 3000); // go towards the basket to shoot
+  wait(300, msec);
+  InertialTurn('l', 30, 18, 4000); // turn the bot slightly to the left to face the basket
+  wait(300, msec);
+  windCatapultAuton(); // wind the catapult up
   wait(300, msec);
   ShootCatapultAuto(4000);    // shoot the preload disks into high goal
-  wait(200, msec);
+  wait(300, msec);
   windCatapultAuton();
-  TurninPlace(20, 8, 3000); // turn back to original position
+  wait(300, msec);
+  InertialTurn('r', 30, 18, 4000); // turn back to original position
+  wait(300, msec);
 
-  for (int i = 0; i < 4; i++) {
-    wait(200, msec);
-    moveForward(-57 - (i*0.5), 20, 4000); // move backwards towards the loading zone
-    wait(200, msec);
-    TurninPlace(88, 15, 4000); // turn clockwise for additional preloads
-    wait(200, msec);
+
+  // PRELOAD/LOW GOAL PROCEDURE X2
+  for (int i = 0; i < 2; i++) {
+    wait(300, msec);
+    moveForward(-55, 20, 4000); // move backwards towards the loading zone
+    wait(300, msec);
+    InertialTurn('r', 30, 87, 4000); // turn clockwise towards the loading zone
+    wait(300, msec);
     moveForward(30 /*+ (i * 3.5)*/, 10, 5000); // move forwards towards loading zone
     wait(3000, msec);
     moveForward(-5, 20, 3000); // move backwards away from the loading zone
-    wait(200, msec);
-    TurninPlace(-90, 15, 4000); // turn counterclockwise towards goal
-    wait(200, msec);
+    wait(300, msec);
+    InertialTurn('l', 30, 87, 4000); // turn counterclockwise towards goal
+    wait(300, msec);
     moveForward(53, 15, 4000); // move forwards towards goal
-    wait(200, msec);
-    TurninPlace(-25, 30, 3000); // turn to face basket
-    wait(200, msec);
-    windCatapultAuton();
-    wait(200, msec);
+    wait(300, msec);
+    InertialTurn('l', 30, 25, 4000); // turn counterclockwise to face basket in order to shoot
+    wait(300, msec);
+    windCatapultAuton(); // wind the catapult up
+    wait(300, msec);
     ShootCatapultAuto(4000);    // shoot the preload disks into high goal
     wait(200, msec);
     windCatapultAuton();
-    wait(200, msec);
-    TurninPlace(20, 30, 3000); // turn back to original position
+    wait(300, msec);
+    InertialTurn('r', 30, 25, 4000); // turn back to original position
   }
+
+  wait(300, msec);
+  moveForward(-175, 40, 6000); // move backwards to other roller
+  wait(300, msec);
+  InertialTurn('r', 30, 87, 4000);  // turn clockwise to adjust to the roller position
+  wait(300, msec);
+  moveForward(-5, 35, 6000); // move backwards to adjust to the roller position
+  wait(300, msec);
+  InertialTurn('l', 30, 87, 4000);  // turn counterclockwise to adjust to the roller position
+  wait(300, msec);
+  moveForward(-52, 15, 6000); // move backwards torwards the roller
+  wait(300, msec);
+  IntakeSpitAuto(400, 70, 5000); // roll the roller
+  wait(300, msec);
+  moveForward(40, 40, 3000); // move forward for expansion
+  wait(300, msec);
+  InertialTurn('l', 30, 30, 4000); // turn counterclockwise to get ready for expansion
+  wait(300, msec);
+  moveForward(-20, 40, 3000); // move slightly backwards for more tiles
+  wait(300, msec);
+  ExpansionLeft.set(1); // shoot expansion
 }
 
 /*--
@@ -176,7 +204,8 @@ void testAuton() {
   // moveForwardPID(40);
   // moveForward(20, 5, 5000);
   // InertialTurn('r', 40, 90, 6000);
-  turnPID(90);
+  RollerAuto(blue);
+  // moveForwardPID(60.0, fwd);
   // wait(1000, msec);
   // InertialTurn('r', 20, 90, 3000);
 }
