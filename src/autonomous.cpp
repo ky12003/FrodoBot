@@ -5,6 +5,7 @@
 
 //--------- Toggle variables ----------
 bool pidDone = false;
+bool doIntake = false;
 
 /*----------
 /////////////////////
@@ -28,7 +29,7 @@ void SetTimeout(int mSec) {
 ////////
 // (w/brute force) move forwards or backwards depending on input (positive value: forwards, negative value: backwards)
 ////////
-void moveForward(float distanceCM, int speedPct, int timeout) {
+void moveForward(float distanceCM, int speedPct, int timeout, bool enableIntakeREG) {
   SetTimeout(timeout);
   AllLeft.setVelocity(speedPct, pct);
   AllRight.setVelocity(speedPct, pct);
@@ -37,8 +38,13 @@ void moveForward(float distanceCM, int speedPct, int timeout) {
   // DRIVE_GEAR_RATIO, rev, false);
   double distanceToTravel = (distanceCM / WHEEL_CIRCUMFERENCE) * DRIVE_GEAR_RATIO;
 
+  if (enableIntakeREG) {
+    intake.spin(directionType::rev, 100, pct);
+  }
+
   AllMotors.rotateFor(forward, distanceToTravel, rev, true);
   
+  intake.stop();
   //Brain.Screen.printAt(30, 30, "TESTING: %f \n", left1.rotation(deg)*(3.1415926535/180)*(6.985/2));
   SetTimeout(0);
 }
@@ -102,8 +108,12 @@ double turnDerivative;
 int PIDMove() {
   
   //------------ PID LOOP --------------
+  if (doIntake) {
+    intake.spin(directionType::rev, 100, pct);
+  }
+
   // while the error is not negligible
-   while (error > 0.3) {
+  while ((error > 0.3 && desiredDistanceCM > 0) || (error < -0.3 && desiredDistanceCM < 0)) {
     /*--
     LATERAL MOVEMENT
     --*/
@@ -114,7 +124,7 @@ int PIDMove() {
     float positionRight = right1.rotation(deg)*(3.1415926535/180)*(6.82625);  // get current distance traveled from RIGHT encoder (in centimeters)
     float positionAVG = (positionLeft + positionRight)/2; // average of the two encoder positions
 
-  printf("DIST: %f\n", positionAVG);
+    printf("DIST: %f\n", positionAVG);
     error = desiredDistanceCM - positionAVG; // Potential
     derivative = error - prevError; // Derivative
     errorSum += error; // Integral
@@ -149,6 +159,7 @@ int PIDMove() {
   pidDone = true;
 
   AllMotors.stop();
+  intake.stop();
   return 1;
 }
 
@@ -164,7 +175,7 @@ void resetValuesPID() {
 ////////
 // set task up for MOVE PID w/ initial variables
 ///////
-void moveForwardPID(float distanceCM) {
+void moveForwardPID(float distanceCM, bool enableIntakePID) {
   Brain.Screen.printAt(30, 30, "TESTING: %f \n", left1.rotation(deg)*(3.1415926535/180)*(6.985/2));
 
   // setup
@@ -172,6 +183,7 @@ void moveForwardPID(float distanceCM) {
   desiredDistanceCM = distanceCM; // initialize distance goal
   desiredTurnDEG = 0; // initialize turn goal (as 0 since goal is straight movement)
   error = desiredDistanceCM; // initialize current error
+  doIntake = enableIntakePID; // initialize switch for enabling/disabling intake during drive
   
   // callback
   vex::task pidTASK(PIDMove);
@@ -251,6 +263,9 @@ void IntakeAuto(int timeout) {
   intake.stop();
 }
 
+// 
+//--------*OLD FUNCTIONS FOR INTAKE/ROLLERS-----------
+//
 void IntakeSpitAutoTime(int mTime, int speedPct, int timeout) {
   // SetTimeout(timeout);
 
@@ -259,7 +274,6 @@ void IntakeSpitAutoTime(int mTime, int speedPct, int timeout) {
   intake.spinFor(reverse, mTime, msec);
   // SetTimeout(0);
 }
-
 void IntakeSpitAuto(float turnDegree, int speedPct, int timeout) {
   SetTimeout(timeout);
 
