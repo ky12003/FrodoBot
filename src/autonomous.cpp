@@ -2,6 +2,10 @@
 #include "Autonomous.h"
 // #include <string>
 
+
+//--------- Toggle variables ----------
+bool pidDone = false;
+
 /*----------
 /////////////////////
 
@@ -78,9 +82,9 @@ double derivative;
 
 // ------FOR TURNING MOVEMENT------
 // constant values for adjusting error
-double pGainTurn = 0.003; // proportional gain constant
-double iGainTurn = 0.002; // integral gain constant
-double dGainTurn = 0.001; // derivative gain constant
+double pGainTurn = 0.03; // proportional gain constant
+double iGainTurn = 0.02; // integral gain constant
+double dGainTurn = 0.01; // derivative gain constant
 // setup variables
 double desiredTurnDEG; // desired turn angle (want to drive straight, so 0)
 double errorTurn = 0; // current error (Sensor Value - Desired Value)
@@ -99,14 +103,18 @@ int PIDMove() {
   
   //------------ PID LOOP --------------
   // while the error is not negligible
-  while (fabs(error) > 0.1) {
+   while (error > 0.3) {
     /*--
     LATERAL MOVEMENT
     --*/
-    float positionLeft = left1.rotation(deg)*(3.1415926535/180)*(6.985/2);  // get current distance traveled from LEFT encoder (in centimeters)
-    float positionRight = right1.rotation(deg)*(3.1415926535/180)*(6.985/2);  // get current distance traveled from RIGHT encoder (in centimeters)
+    printf("TEST#$@#: %f\n", error);
+    printf("TOOORUN: %f\n", errorTurn);
+    
+    float positionLeft = left1.rotation(deg)*(3.1415926535/180)*(6.82625);  // get current distance traveled from LEFT encoder (in centimeters)
+    float positionRight = right1.rotation(deg)*(3.1415926535/180)*(6.82625);  // get current distance traveled from RIGHT encoder (in centimeters)
     float positionAVG = (positionLeft + positionRight)/2; // average of the two encoder positions
 
+  printf("DIST: %f\n", positionAVG);
     error = desiredDistanceCM - positionAVG; // Potential
     derivative = error - prevError; // Derivative
     errorSum += error; // Integral
@@ -129,14 +137,16 @@ int PIDMove() {
     SETUP FOR NEXT LOOP/SPINNING MOTORS
     --*/
     // spin the motors
-    AllLeft.spin(fwd, lateralMotorPower + turnMotorPower, voltageUnits::volt);
-    AllRight.spin(fwd, lateralMotorPower - turnMotorPower, voltageUnits::volt);
+    AllLeft.spin(fwd, lateralMotorPower - turnMotorPower, voltageUnits::volt);
+    AllRight.spin(fwd, lateralMotorPower + turnMotorPower, voltageUnits::volt);
 
     prevError = error;
     prevErrorTurn = errorTurn;
 
     vex::task::sleep(20);
-  }
+  } 
+
+  pidDone = true;
 
   AllMotors.stop();
   return 1;
@@ -149,6 +159,7 @@ void moveForwardPID(float distanceCM) {
   Brain.Screen.printAt(30, 30, "TESTING: %f \n", left1.rotation(deg)*(3.1415926535/180)*(6.985/2));
 
   // setup
+  pidDone = false;
   left1.resetRotation(); // initialize distance travelled as "0"
   right1.resetRotation(); // initialize distance travelled as "0"
   Inertial1.resetRotation(); // initialize turn angle as "0"
@@ -196,6 +207,7 @@ void InertialTurn(char dir, double speed, double DEGREES, double timeout) {
   Inertial1.resetRotation();
   // Inertial2.setHeading(0.05, deg);
   // Inertial3.setHeading(0.05, deg); 
+  printf("TEST: %f\n", Inertial1.rotation(deg));
   if(dir == 'r'){ //Right turning
 
     while(Inertial1.rotation(deg)<DEGREES)
@@ -273,7 +285,7 @@ void RollerAuto(vex::color desiredColor) {
   {
       intake.spin(fwd, 30, pct); //fwd is going to spin intake roller if the top statement is true
   }
-  while (OpticalSensor.color() != desiredColor); // while the 2nd statement is true it is going to changes to opposite color, blue = red, red = blue
+  while (OpticalSensor.color() == desiredColor); // while the 2nd statement is true it is going to changes to opposite color, blue = red, red = blue
   
   intake.stop();// this will stop the roller if the if statement is true and has changed correctly to the opposite color 
   OpticalSensor.setLightPower(0, pct);
