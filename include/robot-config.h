@@ -1,3 +1,6 @@
+#ifndef ROBOTCONF_H
+#define ROBOTCONF_H
+
 using namespace vex;
 
 //control device setup
@@ -29,9 +32,9 @@ extern motor_group AllMotors;
 
 
 //motor encoders
-extern encoder encoder1;
-extern encoder encoder2;
-extern encoder cataswitch;
+// extern encoder encoder1;
+// extern encoder encoder2;
+// extern encoder cataswitch;
 
 // pneumatics
 extern digital_out ExpansionLeft;
@@ -58,3 +61,5 @@ extern const float ROBOT_RADIUS;
  * This should be called at the start of your int main function.
  */
 void vexcodeInit(void);
+
+#endif
