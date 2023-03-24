@@ -21,6 +21,7 @@ motor intake(PORT14,ratio6_1,true);
 //catapult motor (red motor)
 motor thrower(PORT9,ratio36_1,false);
 limit catapultLimit(Brain.ThreeWirePort.A);
+optical OpticalSensor(PORT12);
 // bumper catapultBumper(Brain.ThreeWirePort.D);
 // sonar throwerSonar(Brain.ThreeWirePort.B);
 
