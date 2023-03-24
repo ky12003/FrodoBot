@@ -205,11 +205,11 @@ TEST AUTONS
 --*/
 void testAuton() {
   // printf("test");
-  // moveForwardPID(40);
+  moveForward(50, 30, 3000);
   // RollerAuto(red);
   // wait(500, msec);
 
-  moveForwardPID(-50, true);
+  // moveForwardPID(-50, true);
   // waitUntil(pidDone);
   // wait(300, msec);
   // InertialTurn('r', 20, 90, 6000);
