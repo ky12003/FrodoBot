@@ -1,5 +1,6 @@
 #include "vex.h"
 #include "RobotFunctions.h"
+#include "DrivingFunctions.h"
 #include "robot-config.h"
 
 #include <string>
@@ -10,6 +11,7 @@ using namespace vex;
 bool intaking = false;
 bool intakePosition = false;
 bool catapultWind = true;
+bool doRollerSpin = false;
 
 
 /*-----------
@@ -93,47 +95,59 @@ void intakeToggle() {
   }
 
   if (doIntakeOut) {
+    printf("A\n");
     intake.spin(fwd, 100, pct);
   } else if (doIntakeIn) {
+    printf("B\n");
     intake.spin(directionType::rev, 100, pct);
-  } else {
+  } else if (!doRollerSpin){
+    printf("C\n");
     intake.stop();
   }
 }
 
+/////////
+// Roller spin functions (for red and blue)
+////////
 void spinRollerOpticalBlue() {
-  
-  if (controller1.ButtonL1.pressing()) {
-    OpticalSensor.setLightPower(100, pct);
-    do // is going to do 
-    {
-        intake.spin(fwd, 30, pct); //fwd is going to spin intake roller if the top statement is true
+  OpticalSensor.setLightPower(100, pct);
+  if (OpticalSensor.isNearObject()) {
+    if (OpticalSensor.color() == blue) {
+      doRollerSpin = true;
+    } else {
+      doRollerSpin = false;
     }
-    while (OpticalSensor.color() == blue); // while the 2nd statement is true it is going to changes to opposite color, blue = red, red = blue
-    
+  } else {
+    doRollerSpin = false;
+  }
+
+  if (doRollerSpin && !doIntakeIn && !doIntakeOut) {
+    printf("D");
+    intake.spin(fwd, 30, pct); //fwd is going to spin intake roller if the top statement is true
+  } else if (!doRollerSpin && !doIntakeIn && !doIntakeOut) {
+    printf("E");
     intake.stop();// this will stop the roller if the if statement is true and has changed correctly to the opposite color 
-    OpticalSensor.setLightPower(0, pct);
-  } else if (!doIntakeIn && !doIntakeOut) {
-    intake.stop();
-    OpticalSensor.setLightPower(0, pct);
   }
   
 }
-
 void spinRollerOpticalRed() {
-  if (controller1.ButtonL1.pressing()) {
-    OpticalSensor.setLightPower(100, pct);
-    do // is going to do 
-    {
-        intake.spin(fwd, 30, pct); //fwd is going to spin intake roller if the top statement is true
+  OpticalSensor.setLightPower(100, pct);
+  if (OpticalSensor.isNearObject()) {
+    if (OpticalSensor.color() == red) {
+      doRollerSpin = true;
+    } else {
+      doRollerSpin = false;
     }
-    while (OpticalSensor.color() == red); // while the 2nd statement is true it is going to changes to opposite color, blue = red, red = blue
-    
+  } else {
+    doRollerSpin = false;
+  }
+
+  if (doRollerSpin && !doIntakeIn && !doIntakeOut) {
+    printf("D");
+    intake.spin(fwd, 30, pct); //fwd is going to spin intake roller if the top statement is true
+  } else if (!doRollerSpin && !doIntakeIn && !doIntakeOut) {
+    printf("E");
     intake.stop();// this will stop the roller if the if statement is true and has changed correctly to the opposite color 
-    OpticalSensor.setLightPower(0, pct);
-  } else if (!doIntakeIn && !doIntakeOut) {
-    intake.stop();
-    OpticalSensor.setLightPower(0, pct);
   }
 }
 
