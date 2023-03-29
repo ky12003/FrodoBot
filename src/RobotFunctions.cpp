@@ -107,29 +107,52 @@ void intakeToggle() {
 }
 
 /////////
-// Roller spin functions (for red and blue)
+// Roller spin functions (for red roller)
 ////////
 void spinRollerOpticalBlue() {
-  OpticalSensor.setLightPower(100, pct);
+  // ASSUMES OPTICAL IS ATTACHED UNDER THE ROLLER
+
+  OpticalSensor.setLightPower(100, pct);  // keep light for optical sensor on
+
+  // only check the optical sensor's detected color when it is near the roller
   if (OpticalSensor.isNearObject()) {
-    if (OpticalSensor.color() == blue) {
+    // if the optical sensor detects the desired color:
+    if (OpticalSensor.color() == blue) 
+    {
+      // toggle the roller
       doRollerSpin = true;
-    } else {
+    } 
+    // otherwise (the desired color is now facing upwards, so it is not detected anymore)
+    else 
+    {
+      // untoggle the roller
       doRollerSpin = false;
     }
-  } else {
+  } 
+  // if the robot is NOT near the roller
+  else 
+  {
+    // don't toggle the roller
     doRollerSpin = false;
   }
 
-  if (doRollerSpin && !doIntakeIn && !doIntakeOut) {
-    printf("D");
-    intake.spin(fwd, 30, pct); //fwd is going to spin intake roller if the top statement is true
-  } else if (!doRollerSpin && !doIntakeIn && !doIntakeOut) {
-    printf("E");
-    intake.stop();// this will stop the roller if the if statement is true and has changed correctly to the opposite color 
+  // if the roller toggle is ON, AND the other toggles for the intake are not on
+  if (doRollerSpin && !doIntakeIn && !doIntakeOut) 
+  {
+    // keep the roller spinning
+    intake.spin(fwd, 30, pct); 
+  } 
+  // if the roller toggle is OFF, AND the other toggles for the intake are not on
+  else if (!doRollerSpin && !doIntakeIn && !doIntakeOut) 
+  {
+    // stop the roller
+    intake.stop(); 
   }
   
 }
+/////////
+// Roller spin functions (for blue roller)
+////////
 void spinRollerOpticalRed() {
   OpticalSensor.setLightPower(100, pct);
   if (OpticalSensor.isNearObject()) {
@@ -143,10 +166,8 @@ void spinRollerOpticalRed() {
   }
 
   if (doRollerSpin && !doIntakeIn && !doIntakeOut) {
-    printf("D");
     intake.spin(fwd, 30, pct); //fwd is going to spin intake roller if the top statement is true
   } else if (!doRollerSpin && !doIntakeIn && !doIntakeOut) {
-    printf("E");
     intake.stop();// this will stop the roller if the if statement is true and has changed correctly to the opposite color 
   }
 }
