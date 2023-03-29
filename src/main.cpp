@@ -23,7 +23,6 @@ using namespace vex;
 void UserControl() {
   thrower.setVelocity(100, pct);
   while (true) {
-    printf("TEST: %li\n", catapultLimit.pressing());
     // printf("\ntest: %li", catapultLimit.pressing());
     tankDrive();
     catapultLogic();
