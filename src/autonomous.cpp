@@ -284,25 +284,33 @@ void IntakeSpitAuto(float turnDegree, int speedPct, int timeout) {
 }
 
 void RollerAuto(vex::color desiredColor) {
+  // ASSUMES OPTICAL SENSOR IS FACING THE BOTTOM OF THE ROLLER
 
-  OpticalSensor.setLightPower(100, pct);// itk this is the light, if so set to 0 then testing, 100
+  OpticalSensor.setLightPower(100, pct); // turn the light on
+
+  // keep driving backwards towards the roller until it is near the roller
   while (!OpticalSensor.isNearObject())
-  { printf("TEST!@: %i", OpticalSensor.isNearObject());
+  {
     AllMotors.spin(reverse, 5, pct);
   } 
 
+  // give it a bit of extra time to go near the roller
   wait(300, msec);
 
+  // stop the drive
   AllMotors.stop();
-  //checks if sensor is near roller
-  do // is going to do 
+
+  // LOOP
+  do 
   {
-      intake.spin(fwd, 30, pct); //fwd is going to spin intake roller if the top statement is true
+    // keep spinning the roller...
+    intake.spin(fwd, 30, pct);
   }
-  while (OpticalSensor.color() == desiredColor); // while the 2nd statement is true it is going to changes to opposite color, blue = red, red = blue
+  while (OpticalSensor.color() == desiredColor); // ...while the optical sensor still detects the desired color
   
-  intake.stop();// this will stop the roller if the if statement is true and has changed correctly to the opposite color 
-  OpticalSensor.setLightPower(0, pct);
+  intake.stop(); // stop the intake once the loop is over
+
+  OpticalSensor.setLightPower(0, pct); // turn off the light
 
 }
 
