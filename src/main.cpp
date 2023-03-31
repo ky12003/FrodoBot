@@ -32,12 +32,21 @@ void UserControl() {
     // printf("\ntest: %li", catapultBumper.value());
   }
 }
+
+void preAuton() {
+  Inertial1.resetHeading();
+  Inertial1.startCalibration();
+  do  { } while (Inertial1.isCalibrating());
+}
+
 void Autonomous()
 {
+  preAuton();
+
   // Routine1Auton();
-  // Routine2Auton();
+  Routine2Auton();
   // Routine1Skills();
-  Routine2Skills();
+  // Routine2Skills();
   // testAuton();
   // GPStest();
   // moveinBox();

@@ -76,9 +76,9 @@ void TurninPlace(int turnDegree, int speedPct, int timeout)
 ////////
 // ------FOR REGULAR LATERAL MOVEMENT-------
 // constant values for adjusting error.
-double pGain = 0.003;    // proportional gain constant
-double iGain = 0.002;    // integral gain constant
-double dGain = 0.001;    // derivative gain constant
+double pGain = 0.0001;    // proportional gain constant
+double iGain = 0.00006;    // integral gain constant
+double dGain = 0.00008;    // derivative gain constant
 // setup variables
 double desiredDistanceCM; // variable for storing the desired distance to travel (in centimeters)
 double error = 0; // current error (Sensor Value - Desired Value)
@@ -88,9 +88,9 @@ double derivative;
 
 // ------FOR TURNING MOVEMENT------
 // constant values for adjusting error
-double pGainTurn = 0.03; // proportional gain constant
-double iGainTurn = 0.02; // integral gain constant
-double dGainTurn = 0.01; // derivative gain constant
+double pGainTurn = 0.001; // proportional gain constant
+double iGainTurn = 0.0002; // integral gain constant
+double dGainTurn = 0.0007; // derivative gain constant
 // setup variables
 double desiredTurnDEG; // desired turn angle (want to drive straight, so 0)
 double errorTurn = 0; // current error (Sensor Value - Desired Value)
@@ -117,14 +117,14 @@ int PIDMove() {
     /*--
     LATERAL MOVEMENT
     --*/
-    printf("TEST#$@#: %f\n", error);
+    // printf("TEST#$@#: %f\n", error);
     printf("TOOORUN: %f\n", errorTurn);
     
     float positionLeft = left1.rotation(deg)*(3.1415926535/180)*(6.82625);  // get current distance traveled from LEFT encoder (in centimeters)
     float positionRight = right1.rotation(deg)*(3.1415926535/180)*(6.82625);  // get current distance traveled from RIGHT encoder (in centimeters)
     float positionAVG = (positionLeft + positionRight)/2; // average of the two encoder positions
 
-    printf("DIST: %f\n", positionAVG);
+    // printf("DIST: %f\n", positionAVG);
     error = desiredDistanceCM - positionAVG; // Potential
     derivative = error - prevError; // Derivative
     errorSum += error; // Integral
@@ -136,19 +136,19 @@ int PIDMove() {
     --*/
     float currTurn = Inertial1.rotation(deg); // get the current rotation angle
 
-    errorTurn = currTurn - desiredTurnDEG; // Potential
+    errorTurn = desiredTurnDEG - currTurn; // Potential
     turnDerivative = errorTurn - prevErrorTurn; // Derivative
     errorSumTurn += errorTurn; // Integral
 
     float turnMotorPower = errorTurn*pGainTurn + turnDerivative*dGainTurn + errorSumTurn*iGainTurn; // PID calculation
 
-    Brain.Screen.printAt(30, 30, "TEST");
     /*--
     SETUP FOR NEXT LOOP/SPINNING MOTORS
     --*/
     // spin the motors
-    AllLeft.spin(fwd, lateralMotorPower - turnMotorPower, voltageUnits::volt);
-    AllRight.spin(fwd, lateralMotorPower + turnMotorPower, voltageUnits::volt);
+
+    AllLeft.spin(fwd, lateralMotorPower + turnMotorPower, voltageUnits::volt);
+    AllRight.spin(fwd, lateralMotorPower - turnMotorPower, voltageUnits::volt);
 
     prevError = error;
     prevErrorTurn = errorTurn;
