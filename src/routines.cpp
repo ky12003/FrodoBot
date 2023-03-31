@@ -37,19 +37,20 @@ void Routine3Auton() {
   //TODO: ADD TURN AND SHOOT TO BASKET ON OTHER SIDE.
 }
 
+// Routine starting from roller side; ends with shooting into high goal
 void Routine2Auton() {
-  RollerAuto(blue);             // roll
-  moveForward(20, 10, 5000, false);    // move forward away from the roller
-  wait(800, msec);
-  TurninPlace(85, 10, 4000); // turn clockwise towards the basket
-  wait(800, msec);
-  moveForward(60, 15, 3000, false); // go towards the basket
-  wait(1000, msec);
-  moveForward(45, 10, 3000, false); // go more forwards to prepare for preloads
-  wait(800, msec);
-  TurninPlace(90, 15, 4000); // turn clockwise for additional preloads
-  wait(800, msec);
-  moveForward(50, 10, 5000, false); // move forwards towards loading zone
+  RollerAuto(blue);                 // roll the roller
+  wait(300, msec);                  // buffer
+  moveForward(15, 10, 5000);        // move forward away from the roller
+  wait(300, msec);                  // buffer
+  InertialTurn('r', 15, 42, 3000);  // turn clockwise (right) to get ready to shoot
+  wait(300, msec);                  // buffer
+  moveForwardPID(320);              // go to the middle of the field to shoot
+  waitUntil(pidDone);               // (wait for completion)
+  wait(300, msec);                  // buffer
+  InertialTurn('l', 15, 90, 4000);  // turn counterclockwise (left) to the basket
+  wait(300, msec);                  // buffer
+
 }
 
 /*--
