@@ -88,9 +88,9 @@ double derivative;
 
 // ------FOR TURNING MOVEMENT------
 // constant values for adjusting error
-double pGainTurn = 0.001; // proportional gain constant
-double iGainTurn = 0.0002; // integral gain constant
-double dGainTurn = 0.0007; // derivative gain constant
+double pGainTurn = 0.01; // proportional gain constant
+double iGainTurn = 0.002; // integral gain constant
+double dGainTurn = 0.002; // derivative gain constant
 // setup variables
 double desiredTurnDEG; // desired turn angle (want to drive straight, so 0)
 double errorTurn = 0; // current error (Sensor Value - Desired Value)
@@ -113,11 +113,11 @@ int PIDMove() {
   }
 
   // while the error is not negligible
-  while ((error > 0.3 && desiredDistanceCM > 0) || (error < -0.3 && desiredDistanceCM < 0)) {
+  while ((error > 0.3 && desiredDistanceCM > 0) || (error < -0.3 && desiredDistanceCM < 0)) 
+  {
     /*--
     LATERAL MOVEMENT
     --*/
-    // printf("TEST#$@#: %f\n", error);
     printf("TOOORUN: %f\n", errorTurn);
     
     float positionLeft = left1.rotation(deg)*(3.1415926535/180)*(6.82625);  // get current distance traveled from LEFT encoder (in centimeters)
@@ -295,7 +295,7 @@ void RollerAuto(vex::color desiredColor) {
   } 
 
   // give it a bit of extra time to go near the roller
-  wait(300, msec);
+  wait(400, msec);
 
   // stop the drive
   AllMotors.stop();
@@ -317,9 +317,9 @@ void RollerAuto(vex::color desiredColor) {
 // A function that winds the catapult up and stops after the limit switch is hit.
 bool catapultWindAuton = true;
 void windCatapultAuton() {
-  do {
-    thrower.spin(reverse, 100, pct);
-  } while (catapultLimit.pressing());
+  while (!catapultLimit.pressing()) {
+    thrower.spin(reverse, 60, pct);
+  }
 
   thrower.stop();
 }
