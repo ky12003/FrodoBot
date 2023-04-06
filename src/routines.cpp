@@ -41,16 +41,24 @@ void Routine3Auton() {
 void Routine2Auton() {
   RollerAuto(blue);                 // roll the roller
   wait(300, msec);                  // buffer
-  moveForward(15, 10, 5000);        // move forward away from the roller
+  moveForward(6, 10, 5000);        // move forward away from the roller
   wait(300, msec);                  // buffer
   InertialTurn('r', 15, 42, 3000);  // turn clockwise (right) to get ready to shoot
   wait(300, msec);                  // buffer
-  moveForwardPID(320);              // go to the middle of the field to shoot
+  moveForwardPID(310);              // go to the middle of the field to shoot
   waitUntil(pidDone);               // (wait for completion)
   wait(300, msec);                  // buffer
-  InertialTurn('l', 15, 90, 4000);  // turn counterclockwise (left) to the basket
+  InertialTurn('l', 15, 82, 4000);  // turn counterclockwise (left) to the basket
   wait(300, msec);                  // buffer
-
+  moveForward(-24, 10, 4000);       // move slightly backwards to shoot
+  wait(300, msec);                  // buffer
+  ShootCatapultAuto(4000);          // shoot disk into high goal
+  wait(300, msec);                  // buffer
+  windCatapultAuton();              // wind the catapult up
+  wait(300, msec);                  // buffer
+  IntakeSpitAuto(2000, 70, 4000);   // intake the other preload disk
+  wait(2000, msec);                  // buffer
+  ShootCatapultAuto(4000);          // shoot disk into high goal
 }
 
 /*--
@@ -130,75 +138,11 @@ void Routine1Skills() {
 }
 
 void Routine2Skills() {
-  RollerAuto(red);                 // roll the roller
-  wait(200, msec);
-  moveForward(13, 10, 5000, false);       // move forward away from the roller
-  wait(300, msec);
-  InertialTurn('r', 20, 90, 4000); // Turn clockwise (right) 90 degrees towards the goal
-  wait(300, msec);
-  moveForwardPID(185, false);             // go towards the basket to shoot (OLD: // moveForward(165, 20, 3000);)
-  waitUntil(pidDone);
-  wait(200, msec);
-  InertialTurn('l', 20, 18, 4000); // turn the bot slightly to the left to face the basket
-  wait(300, msec);
-  windCatapultAuton();             // wind the catapult up
-  wait(300, msec);
-  ShootCatapultAuto(4000);         // shoot the preload disks into high goal
-  wait(300, msec);
-  windCatapultAuton();
-  wait(300, msec);
-  InertialTurn('r', 20, 18, 4000); // turn back to original position
-  wait(300, msec);
+  // -------- 1st Roller and 1st 3-disc shot ---------
 
+  // -------- Diagonal disc pickup and 2nd 3-disk shot -------
 
-  // PRELOAD/LOW GOAL PROCEDURE X2
-  for (int i = 0; i < 2; i++) {
-    wait(300, msec);
-    moveForwardPID(-45, false);             // move backwards towards the loading zone (OLD: moveForward(-55, 20, 4000); )
-    waitUntil(pidDone);
-    wait(200, msec);
-    InertialTurn('r', 20, 90, 4000); // turn clockwise towards the loading zone
-    wait(300, msec);
-    moveForward(30 /*+ (i * 3.5)*/, 10, 5000, false); // move forwards towards loading zone
-    wait(3000, msec);
-    moveForward(-5, 20, 3000, false);       // move backwards away from the loading zone
-    wait(300, msec);
-    InertialTurn('l', 20, 90, 4000); // turn counterclockwise towards goal
-    wait(300, msec);
-    moveForwardPID(45, false);              // move forwards towards goal (OLD: moveForward(53, 15, 4000); )
-    waitUntil(pidDone);
-    wait(200, msec);
-    InertialTurn('l', 20, 25, 4000); // turn counterclockwise to face basket in order to shoot
-    wait(300, msec);
-    windCatapultAuton(); // wind the catapult up
-    wait(300, msec);
-    ShootCatapultAuto(4000);    // shoot the preload disks into high goal
-    wait(200, msec);
-    windCatapultAuton();
-    wait(300, msec);
-    InertialTurn('r', 20, 25, 4000); // turn back to original position
-  }
-
-  wait(300, msec);
-  moveForwardPID(-160, true);            // move backwards to other roller (OLD: moveForward(-175, 40, 6000);)
-  waitUntil(pidDone);
-  wait(200, msec);
-  InertialTurn('r', 20, 90, 4000); // turn clockwise to adjust to the roller position
-  wait(300, msec);
-  moveForward(-5, 35, 6000, false);       // move backwards to adjust to the roller position
-  wait(300, msec);
-  InertialTurn('l', 20, 90, 4000); // turn counterclockwise to adjust to the roller position
-  wait(300, msec);
-  RollerAuto(red);                // roll the roller
-  wait(300, msec);
-  moveForwardPID(40, false);              // move forward for expansion (OLD: moveForward(40, 40, 3000);)
-  waitUntil(pidDone);
-  wait(200, msec);
-  InertialTurn('l', 20, 30, 4000); // turn counterclockwise to get ready for expansion
-  wait(300, msec);
-  moveForward(-20, 40, 3000, false);      // move slightly backwards for more tiles
-  wait(300, msec);
-  ExpansionLeft.set(1);            // shoot expansion
+  // -------- Red basket (3rd) 3-disk shot ------------
 }
 
 /*--

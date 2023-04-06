@@ -40,7 +40,7 @@ void manualStopThrower() { thrower.stop(); }
 void windUp() {
 
   if (!catapultLimit.pressing()) {
-    thrower.spin(reverse, 100, pct);
+    thrower.spin(reverse, 60, pct);
   } else {
     catapultWind = !catapultWind;
     thrower.stop();
