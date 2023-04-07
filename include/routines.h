@@ -7,6 +7,7 @@ void Routine3Auton();
 
 void Routine1Skills();
 void Routine2Skills();
+void Routine3Skills();
 
 void moveinBox();
 void spinRoller();

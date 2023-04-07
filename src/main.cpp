@@ -41,12 +41,13 @@ void preAuton() {
 
 void Autonomous()
 {
-  preAuton();
+  // preAuton();
 
   // Routine1Auton();
   Routine2Auton();
   // Routine1Skills();
   // Routine2Skills();
+  // Routine3Skills();
   // testAuton();
   // GPStest();
   // moveinBox();
