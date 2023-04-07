@@ -76,9 +76,9 @@ void TurninPlace(int turnDegree, int speedPct, int timeout)
 ////////
 // ------FOR REGULAR LATERAL MOVEMENT-------
 // constant values for adjusting error.
-double pGain = 0.0001;    // proportional gain constant
-double iGain = 0.00006;    // integral gain constant
-double dGain = 0.00008;    // derivative gain constant
+double pGain = 0.005;    // proportional gain constant
+double iGain = 0.0002;    // integral gain constant
+double dGain = 0.003;    // derivative gain constant
 // setup variables
 double desiredDistanceCM; // variable for storing the desired distance to travel (in centimeters)
 double error = 0; // current error (Sensor Value - Desired Value)
@@ -88,9 +88,9 @@ double derivative;
 
 // ------FOR TURNING MOVEMENT------
 // constant values for adjusting error
-double pGainTurn = 0.01; // proportional gain constant
-double iGainTurn = 0.002; // integral gain constant
-double dGainTurn = 0.002; // derivative gain constant
+double pGainTurn = 0.04; // proportional gain constant
+double iGainTurn = 0.0046; // integral gain constant
+double dGainTurn = 0.007; // derivative gain constant
 // setup variables
 double desiredTurnDEG; // desired turn angle (want to drive straight, so 0)
 double errorTurn = 0; // current error (Sensor Value - Desired Value)
@@ -118,18 +118,18 @@ int PIDMove() {
     /*--
     LATERAL MOVEMENT
     --*/
-    printf("TOOORUN: %f\n", errorTurn);
     
     float positionLeft = left1.rotation(deg)*(3.1415926535/180)*(6.82625);  // get current distance traveled from LEFT encoder (in centimeters)
     float positionRight = right1.rotation(deg)*(3.1415926535/180)*(6.82625);  // get current distance traveled from RIGHT encoder (in centimeters)
     float positionAVG = (positionLeft + positionRight)/2; // average of the two encoder positions
 
-    // printf("DIST: %f\n", positionAVG);
     error = desiredDistanceCM - positionAVG; // Potential
     derivative = error - prevError; // Derivative
     errorSum += error; // Integral
 
     float lateralMotorPower = error*pGain + derivative*dGain + errorSum*iGain; // PID calculation
+
+    printf("\n | POSAVG: %f | ERROR: %f | DERIV: %f | INTEG: %f | POWER: %f", positionAVG, error, derivative, errorSum, lateralMotorPower);
 
     /*--
     TURN MOVEMENT
@@ -142,6 +142,7 @@ int PIDMove() {
 
     float turnMotorPower = errorTurn*pGainTurn + turnDerivative*dGainTurn + errorSumTurn*iGainTurn; // PID calculation
 
+      printf("\n | CURRTURN: %f | TURNERR: %f | TURNDEV: %f | TURNINT: %f | TURNPOW: %f", currTurn, errorTurn, turnDerivative, errorSumTurn, turnMotorPower);
     /*--
     SETUP FOR NEXT LOOP/SPINNING MOTORS
     --*/
@@ -170,6 +171,8 @@ void resetValuesPID() {
   Inertial1.resetRotation(); // initialize turn angle as "0"
   prevError = 0; // initialize prevError
   prevErrorTurn = 0; // initialize prevError
+  errorSum = 0;
+  errorSumTurn = 0;
 }
 
 ////////
@@ -312,6 +315,30 @@ void RollerAuto(vex::color desiredColor) {
 
   OpticalSensor.setLightPower(0, pct); // turn off the light
 
+}
+
+void RollerAutoManual() {
+  OpticalSensor.setLightPower(100, pct); // turn the light on
+
+  // keep driving backwards towards the roller until it is near the roller
+  while (!OpticalSensor.isNearObject())
+  {
+    AllMotors.spin(reverse, 5, pct);
+  } 
+
+  // give it a bit of extra time to go near the roller
+  wait(400, msec);
+
+  AllMotors.stop();
+
+  wait(500, msec);
+
+  IntakeSpitAuto(230, 50, 5000); // roll the roller
+
+  wait(400, msec);
+
+  // stop the drive
+  AllMotors.stop();
 }
 
 // A function that winds the catapult up and stops after the limit switch is hit.

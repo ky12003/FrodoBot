@@ -45,9 +45,9 @@ void Autonomous()
   // preAuton();
 
   // Routine1Auton();
-  // Routine2Auton(blue);
+  Routine2Auton(blue);
   // Routine1Skills();
-  Routine2Skills();
+  // Routine2Skills();
   // Routine3Skills();
   // testAuton();
   // GPStest();

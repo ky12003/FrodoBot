@@ -47,7 +47,8 @@ void Routine1Auton() {
 
 // Routine starting from roller side; ends with shooting into high goal
 void Routine2Auton(vex::color desiredColor) {
-  RollerAuto(desiredColor);                 // roll the roller (*COLOR CHANGES BASED ON SIDE)
+  // RollerAuto(desiredColor);                 // roll the roller (*COLOR CHANGES BASED ON SIDE)
+  RollerAutoManual();
   wait(300, msec);                  // buffer
   moveForward(10, 10, 5000);        // move forward away from the roller
   wait(300, msec);                  // buffer
@@ -288,7 +289,7 @@ void testAuton() {
   // RollerAuto(red);
   // wait(500, msec);
 
-  moveForwardPID(-50, true);
+  moveForwardPID(300, true);
   waitUntil(pidDone);
 }
 

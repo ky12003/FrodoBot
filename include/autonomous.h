@@ -31,6 +31,8 @@ void RollerAuto(vex::color desiredColor);
 void windCatapultAuton();
 void ShootCatapultAuto(int timeout);
 
+
+void RollerAutoManual();
 // void catalimit(int dist, int speed, int timeout);
 // void moveForwardPID(int speed);
 
