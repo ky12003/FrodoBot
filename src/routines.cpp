@@ -15,9 +15,9 @@ void ShootDisks() {
 //------------- Helper function for shooting two disks, one at a time -----------
 void DoubleDiskShot() {
   ShootDisks();                      // Shoot the 1st disk
-  wait(300, msec);                   // Buffer
-  IntakeSpitAuto(-2500, 100, 4000);  // Intake the second disk into the catapult
   wait(400, msec);                   // Buffer
+  IntakeSpitAuto(-2500, 100, 4000);  // Intake the second disk into the catapult
+  wait(1300, msec);                   // Buffer
   ShootDisks();                      // Shoot the 2nd disk
 }
 
@@ -46,8 +46,8 @@ void Routine1Auton() {
 }
 
 // Routine starting from roller side; ends with shooting into high goal
-void Routine2Auton() {
-  RollerAuto(blue);                 // roll the roller (*COLOR CHANGES BASED ON SIDE)
+void Routine2Auton(vex::color desiredColor) {
+  RollerAuto(desiredColor);                 // roll the roller (*COLOR CHANGES BASED ON SIDE)
   wait(300, msec);                  // buffer
   moveForward(10, 10, 5000);        // move forward away from the roller
   wait(300, msec);                  // buffer
@@ -61,7 +61,16 @@ void Routine2Auton() {
   ShootCatapultAuto(4000);          // shoot disk into high goal
   wait(300, msec);                  // buffer
   DoubleDiskShot();                 // Shoot both disks into the basket
-  wait(300, msec);                  // 
+  // wait(300, msec);                  // buffer
+  // InertialTurn('r', 20, 10, 4000);  // slight turn towards disks
+  // wait(300, msec);                  // buffer
+  // moveForward(-30, 10, 4000, true); // move backwards towards disks in the corner while intaking
+  // wait(300, msec);                  // buffer
+  // moveForward(30, 10, 4000);        // move towards basket
+  // wait(300, msec);                  // buffer
+  // InertialTurn('l', 20, 10, 4000);  // turn back to original position
+  // wait(300, msec);                  // buffer
+  // ShootDisks();                     // shoot a disk into the basket
 }
 
 // Routine starting
@@ -151,6 +160,29 @@ void Routine1Skills() {
 //--------------------
 /////////////////////////
 void Routine2Skills() {
+  //TEMP ROUTINE
+  RollerAuto(red);                  // roll the roller (*COLOR CHANGES BASED ON SIDE)
+  wait(300, msec);                  // buffer
+  moveForward(10, 10, 5000);        // move forward away from the roller
+  wait(300, msec);                  // buffer
+  InertialTurn('r', 15, 42, 3000);  // turn clockwise (right) to get ready to shoot
+  wait(300, msec);                  // buffer
+  moveForwardPID(360);              // go to the middle of the field to shoot
+  waitUntil(pidDone);               // (wait for completion)
+  wait(300, msec);                  // buffer
+  InertialTurn('l', 15, 87, 4000);  // turn counterclockwise (left) to the basket
+  wait(300, msec);                  // buffer
+  ShootCatapultAuto(4000);          // shoot disk into high goal
+  wait(300, msec);                  // buffer
+  DoubleDiskShot();                 // Shoot both disks into the basket
+  wait(500, msec);                  // buffer
+  InertialTurn('r', 15, 87, 4000);  // turn counterclockwise (left) to the basket
+  moveForwardPID(-360);
+  waitUntil(pidDone);     
+  wait(1000, msec);               
+  ExpansionLeft.set(1);
+
+
   // -------- 1st Roller and 1st 3-disc shot ---------
 
   // -------- Diagonal disc pickup and 2nd 3-disk shot -------
@@ -166,7 +198,7 @@ void Routine2Skills() {
 void Routine3Skills() {
   // -----------            Preload disk shots (x2)                  ----------------
   // *steps 1-3 on the diagram
-  moveForwardPID(60);               // Move forward to prepare for shot
+  moveForwardPID(80);               // Move forward to prepare for shot
   waitUntil(pidDone);               // Wait for pid do complete
   wait(300, msec);                  // Buffer
   InertialTurn('l', 10, 20, 4000);  // Turn counterclockwise facing the red basket
@@ -177,7 +209,7 @@ void Routine3Skills() {
 
   // -----------            Go for extra loads + shoot (x3)          ----------------
   // *steps 4-5 on the diagram
-  moveForwardPID(-50);               // Move back towards match load area
+  moveForwardPID(-80);               // Move back towards match load area
   waitUntil(pidDone);                // Wait for pid to complete
   wait(3000, msec);                  // Wait for loader to load disks
   moveForward(20, 20, 4000);         // Move away from the match load area
@@ -200,7 +232,7 @@ void Routine3Skills() {
 
   // -----------    Intake Corner disks + shoot into red goal (x2)   ----------------
   // *steps 8-10 in the diagram
-  moveForward(-50, 20, 5000, true);  // Move back towards center while intaking disk
+  moveForward(-80, 20, 5000, true);  // Move back towards center while intaking disk
   wait(300, msec);                   // Buffer
   InertialTurn('r', 10, 70, 4000);   // Turn towards red basket to shoot
   wait(300, msec);                   // Buffer
@@ -218,7 +250,7 @@ void Routine3Skills() {
   wait(300, msec);                   // Buffer
   InertialTurn('r', 40, 160, 4000);  // Turn to wall (clockwise) to get one of the diagonal disks
   wait(300, msec);                   // Buffer
-  moveForwardPID(-60, true);         // Move to diagonal disks while intaking
+  moveForwardPID(-90, true);         // Move to diagonal disks while intaking
   waitUntil(pidDone);                // Wait until pid drive is compete
   wait(300, msec);                   // Buffer
 
@@ -233,12 +265,12 @@ void Routine3Skills() {
   // *steps 15-17 on the diagram
   InertialTurn('l', 20, 100, 4000);  // Turn counterclockwise with the back of the bot facing the roller
   wait(300, msec);                   // Buffer
-  moveForwardPID(-60);               // Move towards roller
+  moveForwardPID(-80);               // Move towards roller
   waitUntil(pidDone);                // Wait for pid move to complete
   wait(300, msec);                   // Buffer
   InertialTurn('l', 10, 10, 3000);   // Turn to face roller
   wait(300, msec);                   // Buffer
-  RollerAuto(blue);                  // Roll the roller
+  RollerAuto(red);                   // Roll the roller
   wait(400, msec);                   // Buffer
   moveForward(30, 80, 2000);         // Move forward for expansion
   wait(200, msec);                   // Buffer
@@ -256,14 +288,8 @@ void testAuton() {
   // RollerAuto(red);
   // wait(500, msec);
 
-  // moveForwardPID(-50, true);
-  // waitUntil(pidDone);
-  // wait(300, msec);
-  // InertialTurn('r', 20, 90, 6000);
-  RollerAuto(blue);
-  // moveForwardPID(60.0, fwd);
-  // wait(1000, msec);
-  // InertialTurn('r', 20, 90, 3000);
+  moveForwardPID(-50, true);
+  waitUntil(pidDone);
 }
 
 void GPStest() { DriveToTargetXY(1, 1, 5, 10); }

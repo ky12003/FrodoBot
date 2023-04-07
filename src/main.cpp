@@ -29,6 +29,7 @@ void UserControl() {
     intakeToggle();
     doExpansion();
     spinRollerOpticalBlue();
+    // spinRollerOpticalRed();
     // printf("\ntest: %li", catapultBumper.value());
   }
 }
@@ -44,9 +45,9 @@ void Autonomous()
   // preAuton();
 
   // Routine1Auton();
-  Routine2Auton();
+  // Routine2Auton(blue);
   // Routine1Skills();
-  // Routine2Skills();
+  Routine2Skills();
   // Routine3Skills();
   // testAuton();
   // GPStest();

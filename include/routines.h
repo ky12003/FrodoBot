@@ -2,7 +2,7 @@
 #define ROUTINES
 
 void Routine1Auton();
-void Routine2Auton();
+void Routine2Auton(vex::color desiredColor);
 void Routine3Auton();
 
 void Routine1Skills();
