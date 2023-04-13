@@ -24,12 +24,12 @@ void UserControl() {
   thrower.setVelocity(100, pct);
   while (true) {
     // printf("\ntest: %li", catapultLimit.pressing());
+    printf("\nHUE: %f", OpticalSensor.hue());
     tankDrive();
     catapultLogic();
     intakeToggle();
     doExpansion();
-    spinRollerOpticalBlue();
-    // printf("\ntest: %li", catapultBumper.value());
+    spinRollerOptical(blue);
   }
 }
 void Autonomous()

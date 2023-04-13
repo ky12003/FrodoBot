@@ -56,6 +56,11 @@ extern const float DRIVE_GEAR_RATIO;
 extern const float TRACK_WIDTH;
 extern const float ROBOT_RADIUS;
 
+extern const float redMIN;
+extern const float redMAX;
+extern const float blueMIN;
+extern const float blueMAX;
+
 /**
  * Used to initialize code/tasks/devices added using tools in VEXcode Pro.
  *

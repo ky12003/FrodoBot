@@ -2,6 +2,7 @@
 #include "RobotFunctions.h"
 #include "DrivingFunctions.h"
 #include "robot-config.h"
+#include "helper-functions.h"
 
 #include <string>
 
@@ -106,18 +107,21 @@ void intakeToggle() {
   }
 }
 
+
+
 /////////
 // Roller spin functions (for red roller)
 ////////
-void spinRollerOpticalBlue() {
+void spinRollerOptical(vex::color desiredColor) {
   // ASSUMES OPTICAL IS ATTACHED UNDER THE ROLLER
 
   OpticalSensor.setLightPower(100, pct);  // keep light for optical sensor on
 
   // only check the optical sensor's detected color when it is near the roller
   if (OpticalSensor.isNearObject()) {
+
     // if the optical sensor detects the desired color:
-    if (OpticalSensor.color() == blue) 
+    if (isColor(desiredColor, OpticalSensor.hue())) 
     {
       // toggle the roller
       doRollerSpin = true;
@@ -149,27 +153,6 @@ void spinRollerOpticalBlue() {
     intake.stop(); 
   }
   
-}
-/////////
-// Roller spin functions (for blue roller)
-////////
-void spinRollerOpticalRed() {
-  OpticalSensor.setLightPower(100, pct);
-  if (OpticalSensor.isNearObject()) {
-    if (OpticalSensor.color() == red) {
-      doRollerSpin = true;
-    } else {
-      doRollerSpin = false;
-    }
-  } else {
-    doRollerSpin = false;
-  }
-
-  if (doRollerSpin && !doIntakeIn && !doIntakeOut) {
-    intake.spin(fwd, 30, pct); //fwd is going to spin intake roller if the top statement is true
-  } else if (!doRollerSpin && !doIntakeIn && !doIntakeOut) {
-    intake.stop();// this will stop the roller if the if statement is true and has changed correctly to the opposite color 
-  }
 }
 
 /*-----------
