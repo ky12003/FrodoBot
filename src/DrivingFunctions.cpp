@@ -1,6 +1,7 @@
 #include "vex.h"
 #include "DrivingFunctions.h"
 #include "robot-config.h"
+
 using namespace vex;
 
 void arcadeDrive()

@@ -15,8 +15,7 @@ void doExpansion();
 // void manualStopThrower();
 
 // roller w/ optical
-void spinRollerOpticalBlue();
-void spinRollerOpticalRed();
+void spinRollerOptical(vex::color desiredColor);
 
 // helper functions for catapult
 void windUp();

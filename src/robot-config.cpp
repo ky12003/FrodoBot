@@ -60,6 +60,12 @@ const float DRIVE_GEAR_RATIO = 1;
 const float TRACK_WIDTH = 7.5;
 const float ROBOT_RADIUS = sqrtf( powf( (TRACK_WIDTH/2), 2) + powf( (WHEEL_BASE/2), 2) );
 
+const float redMIN = 5; // RANGE FOR RED: 5 < hue < 30
+const float redMAX = 30;
+const float blueMIN = 210;  // RANGE FOR BLUE: 210 < hue < 240
+const float blueMAX = 240;
+
+
 /**
  * Used to initialize code/tasks/devices added using tools in VEXcode Pro.
  *

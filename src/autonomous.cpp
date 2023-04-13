@@ -1,5 +1,6 @@
 #include "vex.h"
 #include "Autonomous.h"
+#include "helper-functions.h"
 // #include <string>
 
 
@@ -263,9 +264,9 @@ void IntakeAuto(int timeout) {
   intake.stop();
 }
 
-// 
-//--------*OLD FUNCTIONS FOR INTAKE/ROLLERS-----------
-//
+//////////
+// MANUAL FUNCTIONS FOR ROLLERS
+///////////
 void IntakeSpitAutoTime(int mTime, int speedPct, int timeout) {
   // SetTimeout(timeout);
 
@@ -283,6 +284,10 @@ void IntakeSpitAuto(float turnDegree, int speedPct, int timeout) {
   SetTimeout(0);
 }
 
+
+////////
+// AUTONOMOUS ROLLER FUNCTION
+////////
 void RollerAuto(vex::color desiredColor) {
   // ASSUMES OPTICAL SENSOR IS FACING THE BOTTOM OF THE ROLLER
 
@@ -306,7 +311,7 @@ void RollerAuto(vex::color desiredColor) {
     // keep spinning the roller...
     intake.spin(fwd, 30, pct);
   }
-  while (OpticalSensor.color() == desiredColor); // ...while the optical sensor still detects the desired color
+  while (isColor(desiredColor, OpticalSensor.hue())); // ...while the optical sensor still detects the desired color
   
   intake.stop(); // stop the intake once the loop is over
 
