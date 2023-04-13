@@ -7,6 +7,14 @@
 bool pidDone = false;
 bool doIntake = false;
 
+//--------- Hue constants (for optical) ------
+// RANGE FOR RED: 5 < hue < 30
+// RANGE FOR BLUE: 210 < hue < 240
+float redMIN = 5;
+float redMAX = 30;
+float blueMIN = 210;
+float blueMAX = 240;
+
 /*----------
 /////////////////////
 
@@ -263,9 +271,9 @@ void IntakeAuto(int timeout) {
   intake.stop();
 }
 
-// 
-//--------*OLD FUNCTIONS FOR INTAKE/ROLLERS-----------
-//
+//////////
+// MANUAL FUNCTIONS FOR ROLLERS
+///////////
 void IntakeSpitAutoTime(int mTime, int speedPct, int timeout) {
   // SetTimeout(timeout);
 
@@ -283,6 +291,40 @@ void IntakeSpitAuto(float turnDegree, int speedPct, int timeout) {
   SetTimeout(0);
 }
 
+
+////////
+// HELPER FUNCTION FOR AUTONOMOUS ROLLER FUNCTION TO CHECK IF HUE IS IN COLOR RANGE
+////////
+bool isColor(vex::color desiredColor, float hueNum) {
+  // if the desired color is blue...
+  if (desiredColor == blue) 
+  {
+    // if the hue is within the range of values to be considered "blue"..
+    if (hueNum > blueMIN && hueNum < blueMAX) 
+    {
+      // detected color is blue.
+      return true;
+    }
+  }
+  else if (desiredColor == red) 
+  {
+    // if the hue is within the range of values to be considered "red"...
+    if (hueNum > redMIN && hueNum < redMAX) 
+    {
+      // detected color is red.
+      return true;
+    }
+  }
+
+
+  // no conditions were fulfilled (detected color does not match desired color)
+  return false; 
+}
+
+
+////////
+// AUTONOMOUS ROLLER FUNCTION
+////////
 void RollerAuto(vex::color desiredColor) {
   // ASSUMES OPTICAL SENSOR IS FACING THE BOTTOM OF THE ROLLER
 
@@ -306,7 +348,7 @@ void RollerAuto(vex::color desiredColor) {
     // keep spinning the roller...
     intake.spin(fwd, 30, pct);
   }
-  while (OpticalSensor.color() == desiredColor); // ...while the optical sensor still detects the desired color
+  while (isColor(desiredColor, OpticalSensor.hue())); // ...while the optical sensor still detects the desired color
   
   intake.stop(); // stop the intake once the loop is over
 
