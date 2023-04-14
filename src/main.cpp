@@ -24,7 +24,6 @@ void UserControl() {
   thrower.setVelocity(100, pct);
   while (true) {
     // printf("\ntest: %li", catapultLimit.pressing());
-    printf("\nSONAR: %f", SonarSensor.distance(distanceUnits::cm));
     tankDrive();
     catapultLogic();
     intakeToggle();
@@ -32,22 +31,13 @@ void UserControl() {
     spinRollerOptical(blue);
   }
 }
-
-void preAuton() {
-  Inertial1.resetHeading();
-  Inertial1.startCalibration();
-  do  { } while (Inertial1.isCalibrating());
-}
-
 void Autonomous()
 {
-  preAuton();
-
   // Routine1Auton();
-  Routine2Auton();
+  // Routine2Auton();
   // Routine1Skills();
   // Routine2Skills();
-  // testAuton();
+  testAuton();
   // GPStest();
   // moveinBox();
 }
