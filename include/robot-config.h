@@ -45,6 +45,9 @@ extern digital_out ExpansionRight;
 extern gps DrivetrainGPS;
 long map(long x, long in_min, long in_max, long out_min, long out_max);
 
+// sonar
+extern sonar SonarSensor;
+
 // Inertial
 extern inertial Inertial1; // Under the catapult near the front of the bot
 // extern inertial Inertial2; // 
@@ -60,6 +63,9 @@ extern const float redMIN;
 extern const float redMAX;
 extern const float blueMIN;
 extern const float blueMAX;
+
+extern const float diskBoundMAX;
+extern const float diskBoundMIN;
 
 /**
  * Used to initialize code/tasks/devices added using tools in VEXcode Pro.
