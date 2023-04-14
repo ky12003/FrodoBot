@@ -67,6 +67,9 @@ const float redMAX = 30;
 const float blueMIN = 210;  // RANGE FOR BLUE: 210 < hue < 240
 const float blueMAX = 240;
 
+const float diskBoundMAX = 4.6;
+const float diskBoundMIN = 3.6;
+
 
 /**
  * Used to initialize code/tasks/devices added using tools in VEXcode Pro.

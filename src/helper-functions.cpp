@@ -31,3 +31,20 @@ bool isColor(vex::color desiredColor, float hueNum) {
   // no conditions were fulfilled (detected color does not match desired color)
   return false; 
 }
+
+////////
+// HELPER FUNCTION FOR DETERMINING IF A DISK IS IN THE INTAKE
+///////
+bool diskInIntake() {
+  float dist = SonarSensor.distance(distanceUnits::cm); // store the detected distance
+
+  // if the disk is detected in the intake...
+  if (dist <= diskBoundMAX && dist >= diskBoundMIN) 
+  {
+    // disk is in intake
+    return true;
+  }
+
+  // otherwise, disk is not in the intake
+  return false;
+}

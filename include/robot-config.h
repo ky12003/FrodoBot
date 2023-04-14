@@ -64,6 +64,9 @@ extern const float redMAX;
 extern const float blueMIN;
 extern const float blueMAX;
 
+extern const float diskBoundMAX;
+extern const float diskBoundMIN;
+
 /**
  * Used to initialize code/tasks/devices added using tools in VEXcode Pro.
  *

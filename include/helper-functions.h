@@ -2,5 +2,6 @@
 #define HELPERFUNCTIONS_H
 
 bool isColor(vex::color desiredColor, float hueNum);
+bool diskInIntake();
 
 #endif
