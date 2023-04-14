@@ -45,6 +45,9 @@ extern digital_out ExpansionRight;
 extern gps DrivetrainGPS;
 long map(long x, long in_min, long in_max, long out_min, long out_max);
 
+// sonar
+extern sonar SonarSensor;
+
 // Inertial
 extern inertial Inertial1; // Under the catapult near the front of the bot
 // extern inertial Inertial2; // 

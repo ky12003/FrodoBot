@@ -34,6 +34,8 @@ motor_group AllMotors(left1, left2, left3, right1, right2, right3);
 // GPS
 gps DrivetrainGPS = gps(PORT10, 118, 10, mm, 90); //port, x, y, units, angle offset
 
+sonar SonarSensor = sonar(Brain.ThreeWirePort.C);
+
 smartdrive Drivetrain = smartdrive(AllLeft, AllRight, DrivetrainGPS, 319.19, 265, 255, mm, 1);
 long map(long x, long in_min, long in_max, long out_min, long out_max)
 {
