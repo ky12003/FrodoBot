@@ -24,7 +24,7 @@ void UserControl() {
   thrower.setVelocity(100, pct);
   while (true) {
     // printf("\ntest: %li", catapultLimit.pressing());
-    printf("\nHUE: %f", OpticalSensor.hue());
+    printf("\nSONAR: %f", SonarSensor.distance(distanceUnits::cm));
     tankDrive();
     catapultLogic();
     intakeToggle();
