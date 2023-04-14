@@ -77,9 +77,9 @@ void TurninPlace(int turnDegree, int speedPct, int timeout)
 ////////
 // ------FOR REGULAR LATERAL MOVEMENT-------
 // constant values for adjusting error.
-double pGain = 0.0001;    // proportional gain constant
-double iGain = 0.00006;    // integral gain constant
-double dGain = 0.00008;    // derivative gain constant
+double pGain = 0.003;    // proportional gain constant
+double iGain = 0.002;    // integral gain constant
+double dGain = 0.001;    // derivative gain constant
 // setup variables
 double desiredDistanceCM; // variable for storing the desired distance to travel (in centimeters)
 double error = 0; // current error (Sensor Value - Desired Value)
@@ -89,9 +89,9 @@ double derivative;
 
 // ------FOR TURNING MOVEMENT------
 // constant values for adjusting error
-double pGainTurn = 0.01; // proportional gain constant
-double iGainTurn = 0.002; // integral gain constant
-double dGainTurn = 0.002; // derivative gain constant
+double pGainTurn = 0.03; // proportional gain constant
+double iGainTurn = 0.02; // integral gain constant
+double dGainTurn = 0.01; // derivative gain constant
 // setup variables
 double desiredTurnDEG; // desired turn angle (want to drive straight, so 0)
 double errorTurn = 0; // current error (Sensor Value - Desired Value)
@@ -114,18 +114,18 @@ int PIDMove() {
   }
 
   // while the error is not negligible
-  while ((error > 0.3 && desiredDistanceCM > 0) || (error < -0.3 && desiredDistanceCM < 0)) 
-  {
+  while ((error > 0.3 && desiredDistanceCM > 0) || (error < -0.3 && desiredDistanceCM < 0)) {
     /*--
     LATERAL MOVEMENT
     --*/
+    printf("TEST#$@#: %f\n", error);
     printf("TOOORUN: %f\n", errorTurn);
     
     float positionLeft = left1.rotation(deg)*(3.1415926535/180)*(6.82625);  // get current distance traveled from LEFT encoder (in centimeters)
     float positionRight = right1.rotation(deg)*(3.1415926535/180)*(6.82625);  // get current distance traveled from RIGHT encoder (in centimeters)
     float positionAVG = (positionLeft + positionRight)/2; // average of the two encoder positions
 
-    // printf("DIST: %f\n", positionAVG);
+    printf("DIST: %f\n", positionAVG);
     error = desiredDistanceCM - positionAVG; // Potential
     derivative = error - prevError; // Derivative
     errorSum += error; // Integral
@@ -137,19 +137,19 @@ int PIDMove() {
     --*/
     float currTurn = Inertial1.rotation(deg); // get the current rotation angle
 
-    errorTurn = desiredTurnDEG - currTurn; // Potential
+    errorTurn = currTurn - desiredTurnDEG; // Potential
     turnDerivative = errorTurn - prevErrorTurn; // Derivative
     errorSumTurn += errorTurn; // Integral
 
     float turnMotorPower = errorTurn*pGainTurn + turnDerivative*dGainTurn + errorSumTurn*iGainTurn; // PID calculation
 
+    Brain.Screen.printAt(30, 30, "TEST");
     /*--
     SETUP FOR NEXT LOOP/SPINNING MOTORS
     --*/
     // spin the motors
-
-    AllLeft.spin(fwd, lateralMotorPower + turnMotorPower, voltageUnits::volt);
-    AllRight.spin(fwd, lateralMotorPower - turnMotorPower, voltageUnits::volt);
+    AllLeft.spin(fwd, lateralMotorPower - turnMotorPower, voltageUnits::volt);
+    AllRight.spin(fwd, lateralMotorPower + turnMotorPower, voltageUnits::volt);
 
     prevError = error;
     prevErrorTurn = errorTurn;
@@ -257,15 +257,15 @@ SCORING
 /////////////////////
 ------*/
 
-void IntakeAuto(int timeout) {
-  SetTimeout(timeout);
-  intake.spin(reverse, 100, pct);
-  SetTimeout(0);
-  intake.stop();
-}
+// void IntakeAuto(int timeout) {
+//   SetTimeout(timeout);
+//   intake.spin(reverse, 100, pct);
+//   SetTimeout(0);
+//   intake.stop();
+// }
 
 //////////
-// MANUAL FUNCTIONS FOR ROLLERS
+// AUTONOMOUS FUNCTION FOR INTAKE (with time input)
 ///////////
 void IntakeSpitAutoTime(int mTime, int speedPct, int timeout) {
   // SetTimeout(timeout);
@@ -275,6 +275,10 @@ void IntakeSpitAutoTime(int mTime, int speedPct, int timeout) {
   intake.spinFor(reverse, mTime, msec);
   // SetTimeout(0);
 }
+
+//////////
+// AUTONOMOUS FUNCTION FOR INTAKE (with degree input)
+///////////
 void IntakeSpitAuto(float turnDegree, int speedPct, int timeout) {
   SetTimeout(timeout);
 
@@ -284,9 +288,32 @@ void IntakeSpitAuto(float turnDegree, int speedPct, int timeout) {
   SetTimeout(0);
 }
 
+//////////
+// AUTONOMOUS INTAKE FUNCTION TO INTAKE WHILE THERE IS NO DISK IN THE INTAKE
+///////////
+void StoreDisk(int timeout) {
+  SetTimeout(timeout);
+
+  // while there is no disk fully in the intake...
+  while (!diskInIntake()) 
+  {
+    intake.spin(reverse, 20, pct);
+  }
+
+  intake.stop();
+
+  // wait(200, msec);
+
+  // if (diskInIntake()) {
+  //   intake.rotateFor(forward, 100, deg, false);
+  // }
+  
+
+  SetTimeout(0);
+}
 
 ////////
-// AUTONOMOUS ROLLER FUNCTION
+// AUTONOMOUS ROLLER FUNCTION W/ OPTICAL
 ////////
 void RollerAuto(vex::color desiredColor) {
   // ASSUMES OPTICAL SENSOR IS FACING THE BOTTOM OF THE ROLLER
@@ -300,7 +327,7 @@ void RollerAuto(vex::color desiredColor) {
   } 
 
   // give it a bit of extra time to go near the roller
-  wait(400, msec);
+  wait(300, msec);
 
   // stop the drive
   AllMotors.stop();
@@ -322,9 +349,9 @@ void RollerAuto(vex::color desiredColor) {
 // A function that winds the catapult up and stops after the limit switch is hit.
 bool catapultWindAuton = true;
 void windCatapultAuton() {
-  while (!catapultLimit.pressing()) {
-    thrower.spin(reverse, 60, pct);
-  }
+  do {
+    thrower.spin(reverse, 100, pct);
+  } while (catapultLimit.pressing());
 
   thrower.stop();
 }
