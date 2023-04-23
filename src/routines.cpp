@@ -38,7 +38,7 @@ void Routine3Auton() {
 }
 
 void Routine2Auton() {
-  RollerAuto(blue);             // roll
+  RollerAuto(red);             // roll
   moveForward(20, 10, 5000, false);    // move forward away from the roller
   wait(800, msec);
   TurninPlace(85, 10, 4000); // turn clockwise towards the basket

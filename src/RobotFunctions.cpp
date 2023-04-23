@@ -14,6 +14,7 @@ bool intakePosition = false;
 bool catapultWind = true;
 bool doRollerSpin = false;
 
+double intakeSpeed = 70;
 
 /*-----------
 CATAPULT
@@ -41,7 +42,7 @@ void manualStopThrower() { thrower.stop(); }
 void windUp() {
 
   if (!catapultLimit.pressing()) {
-    thrower.spin(reverse, 60, pct);
+    thrower.spin(reverse, 100, pct);
   } else {
     catapultWind = !catapultWind;
     thrower.stop();
@@ -58,11 +59,50 @@ void shootDisks() {
 
 
 /*-----------
+/////////////
 INTAKE
+/////////////
 ------------*/
+
+//////////////
+// Helper function(s) to change the intake speed
+//////////////
+bool bufferSpeedIntake = false;
+// mini function to lower speed
+void lowerIntakeSpeed() { ; bufferSpeedIntake = !bufferSpeedIntake;}
+
+// mini function to raise speed
+void raiseIntakeSpeed() {  bufferSpeedIntake = !bufferSpeedIntake;}
+
+// MAIN HELPER FUNCTION
+void changeIntakeSpeed() {
+  printf("TEST: %f\n", intakeSpeed);
+  if (controller1.ButtonRight.pressing()) {
+    if (!bufferSpeedIntake) {
+      intakeSpeed = intakeSpeed + 10;
+      bufferSpeedIntake = !bufferSpeedIntake;
+    }
+    
+  } 
+  else if (controller1.ButtonLeft.pressing()) 
+  {
+    if (!bufferSpeedIntake) {
+      intakeSpeed = intakeSpeed - 10;
+      bufferSpeedIntake = !bufferSpeedIntake;
+    }
+  }
+  else 
+  {
+    bufferSpeedIntake = false;
+  }
+  
+}
 
 void reverseIntake() { intakePosition = !intakePosition; }
 
+//////////////
+// Function for toggling the intake
+//////////////
 bool doIntakeOut = false;
 bool doIntakeIn = false;
 bool intakeToggleBuffering = false;
@@ -97,10 +137,10 @@ void intakeToggle() {
 
   if (doIntakeOut) {
     printf("A\n");
-    intake.spin(fwd, 100, pct);
+    intake.spin(fwd, intakeSpeed, pct);
   } else if (doIntakeIn) {
     printf("B\n");
-    intake.spin(directionType::rev, 100, pct);
+    intake.spin(directionType::rev, intakeSpeed, pct);
   } else if (!doRollerSpin){
     printf("C\n");
     intake.stop();
@@ -114,7 +154,7 @@ void intakeToggle() {
 ////////
 void spinRollerOptical(vex::color desiredColor) {
   // ASSUMES OPTICAL IS ATTACHED UNDER THE ROLLER
-
+    printf("TEST: %i", diskInIntake());
   OpticalSensor.setLightPower(100, pct);  // keep light for optical sensor on
 
   // only check the optical sensor's detected color when it is near the roller

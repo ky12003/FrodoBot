@@ -28,16 +28,17 @@ void UserControl() {
     catapultLogic();
     intakeToggle();
     doExpansion();
-    spinRollerOptical(blue);
+    spinRollerOptical(red);
+    changeIntakeSpeed();
   }
 }
 void Autonomous()
 {
   // Routine1Auton();
-  // Routine2Auton();
+  Routine2Auton();
   // Routine1Skills();
   // Routine2Skills();
-  testAuton();
+  // testAuton();
   // GPStest();
   // moveinBox();
 }
