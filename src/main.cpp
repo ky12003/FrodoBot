@@ -34,8 +34,8 @@ void UserControl() {
 }
 void Autonomous()
 {
-  // Routine1Auton();
-  Routine2Auton();
+  Routine1Auton(red);
+  // Routine2Auton();
   // Routine1Skills();
   // Routine2Skills();
   // testAuton();

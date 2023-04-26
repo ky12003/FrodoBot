@@ -24,8 +24,8 @@ void InertialTurn(char dir, double speed, double DEGREES, double timeout);
 /*----------
 SCORING
 ----------*/
-void StoreDisk(int timeout);
-void IntakeSpitAutoTime(int mTime, int speedPct, int timeout);
+void StoreDisk(int timeout, bool storeInCatapult = false);
+void IntakeSpitAutoTime(int mTime, int speedPct);
 void IntakeSpitAuto(float turnDegree, int speedPct, int timeout);
 void IntakeAuto(int timeout);
 void RollerAuto(vex::color desiredColor);

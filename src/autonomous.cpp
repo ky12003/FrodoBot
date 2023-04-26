@@ -31,7 +31,7 @@ void SetTimeout(int mSec) {
 // (w/brute force) move forwards or backwards depending on input (positive value: forwards, negative value: backwards)
 ////////
 void moveForward(float distanceCM, int speedPct, int timeout, bool enableIntakeREG) {
-  SetTimeout(timeout);
+  // SetTimeout(timeout);
   AllLeft.setVelocity(speedPct, pct);
   AllRight.setVelocity(speedPct, pct);
   // (GEAR RATIO IS ONE-TO-ONE, so the "distance" would be times 1)
@@ -40,14 +40,20 @@ void moveForward(float distanceCM, int speedPct, int timeout, bool enableIntakeR
   double distanceToTravel = (distanceCM / WHEEL_CIRCUMFERENCE) * DRIVE_GEAR_RATIO;
 
   if (enableIntakeREG) {
-    intake.spin(directionType::rev, 100, pct);
+    intake.setTimeout(timeout, msec);
+    intake.spin(directionType::rev, 70, pct);
   }
+  AllMotors.setTimeout(timeout, msec);
+
 
   AllMotors.rotateFor(forward, distanceToTravel, rev, true);
   
-  intake.stop();
   //Brain.Screen.printAt(30, 30, "TESTING: %f \n", left1.rotation(deg)*(3.1415926535/180)*(6.985/2));
-  SetTimeout(0);
+  intake.setTimeout(0, sec);
+  AllMotors.setTimeout(0, sec);
+  // SetTimeout(0);
+  intake.stop();
+  AllMotors.stop();
 }
 
 ////////
@@ -72,14 +78,50 @@ void TurninPlace(int turnDegree, int speedPct, int timeout)
   SetTimeout(0);
 }
 
+// Turn with inertial sensor. 
+//(dir): "r" or "l" for "right" or "left" respectively. (speed): turning speed in PERCENT. (DEGREES): turn in DEGREES. timeout: timeout in MSEC. 
+void InertialTurn(char dir, double speed, double DEGREES, double timeout) {
+  Inertial1.resetRotation();
+  // Inertial2.setHeading(0.05, deg);
+  // Inertial3.setHeading(0.05, deg); 
+  if(dir == 'r'){ //Right turning
+
+    while(Inertial1.rotation(deg)<DEGREES)
+    {
+      AllLeft.spin(forward, speed, pct);
+      AllRight.spin(reverse, speed, pct);
+
+    } 
+      do{
+        AllLeft.spin(reverse, 3, pct);
+        AllRight.spin(forward, 3, pct);
+      }while(Inertial1.rotation(deg) > DEGREES);
+  }
+  else if(dir == 'l') {
+    while(fabs(Inertial1.rotation(deg))<DEGREES)
+    {
+      AllLeft.spin(reverse, speed, pct);
+      AllRight.spin(forward, speed, pct);
+    }
+        do{
+      AllLeft.spin(forward, 3, pct);
+      AllRight.spin(reverse, 3, pct);
+    }while(fabs(Inertial1.rotation(deg))>DEGREES);
+  }
+  AllLeft.stop(hold);
+  AllRight.stop(hold);
+  // Inertial1.calibrate();
+  // waitUntil(!Inertial1.isCalibrating());
+}
+
 ////////
 // SETTINGS FOR PID
 ////////
 // ------FOR REGULAR LATERAL MOVEMENT-------
 // constant values for adjusting error.
-double pGain = 0.003;    // proportional gain constant
+double pGain = 0.012;    // proportional gain constant
 double iGain = 0.002;    // integral gain constant
-double dGain = 0.001;    // derivative gain constant
+double dGain = 0.012;    // derivative gain constant
 // setup variables
 double desiredDistanceCM; // variable for storing the desired distance to travel (in centimeters)
 double error = 0; // current error (Sensor Value - Desired Value)
@@ -110,7 +152,7 @@ int PIDMove() {
   
   //------------ PID LOOP --------------
   if (doIntake) {
-    intake.spin(directionType::rev, 100, pct);
+    intake.spin(directionType::rev, 50, pct);
   }
 
   // while the error is not negligible
@@ -118,14 +160,11 @@ int PIDMove() {
     /*--
     LATERAL MOVEMENT
     --*/
-    printf("TEST#$@#: %f\n", error);
-    printf("TOOORUN: %f\n", errorTurn);
     
     float positionLeft = left1.rotation(deg)*(3.1415926535/180)*(6.82625);  // get current distance traveled from LEFT encoder (in centimeters)
     float positionRight = right1.rotation(deg)*(3.1415926535/180)*(6.82625);  // get current distance traveled from RIGHT encoder (in centimeters)
     float positionAVG = (positionLeft + positionRight)/2; // average of the two encoder positions
 
-    printf("DIST: %f\n", positionAVG);
     error = desiredDistanceCM - positionAVG; // Potential
     derivative = error - prevError; // Derivative
     errorSum += error; // Integral
@@ -156,11 +195,25 @@ int PIDMove() {
 
     vex::task::sleep(20);
   } 
-
-  pidDone = true;
-
+  
   AllMotors.stop();
   intake.stop();
+  wait(500, msec);        // buffer
+
+  float remainingTurnErr = Inertial1.rotation(deg); // remaining turn error
+    
+  // if remaining turn error is positive (too far clockwise) (*WITHIN MARGIN)
+  if (remainingTurnErr > 3) 
+  {
+    InertialTurn('l', 7, fabs(remainingTurnErr), 4000); // correct remaining turn error counterclockwise
+  }
+  // otherwise, if remaining turn error is negative (too far counterclockwise) (*WITHIN MARGIN)
+  else if (remainingTurnErr < -3)
+  {
+    InertialTurn('r', 7, fabs(remainingTurnErr), 4000); // correct remaining turn error clockwise
+  }
+
+  pidDone = true;
   return 1;
 }
 
@@ -169,8 +222,17 @@ void resetValuesPID() {
   left1.resetRotation(); // initialize distance travelled as "0"
   right1.resetRotation(); // initialize distance travelled as "0"
   Inertial1.resetRotation(); // initialize turn angle as "0"
-  prevError = 0; // initialize prevError
-  prevErrorTurn = 0; // initialize prevError
+  // reset proportional error
+  error = 0;
+  errorTurn = 0;
+  // reset integral error
+  errorSum = 0;
+  errorSumTurn = 0;
+  // reset derivative error
+  prevError = 0; 
+  prevErrorTurn = 0; 
+
+
 }
 
 ////////
@@ -214,41 +276,6 @@ void moveForwardPID(float distanceCM, bool enableIntakePID) {
 //   return inertialSum;
 // }
 
-// Turn with inertial sensor. 
-//(dir): "r" or "l" for "right" or "left" respectively. (speed): turning speed in PERCENT. (DEGREES): turn in DEGREES. timeout: timeout in MSEC. 
-void InertialTurn(char dir, double speed, double DEGREES, double timeout) {
-  Inertial1.resetRotation();
-  // Inertial2.setHeading(0.05, deg);
-  // Inertial3.setHeading(0.05, deg); 
-  printf("TEST: %f\n", Inertial1.rotation(deg));
-  if(dir == 'r'){ //Right turning
-
-    while(Inertial1.rotation(deg)<DEGREES)
-    {
-      AllLeft.spin(forward, speed, pct);
-      AllRight.spin(reverse, speed, pct);
-
-    } 
-      do{
-        AllLeft.spin(reverse, 3, pct);
-        AllRight.spin(forward, 3, pct);
-      }while(Inertial1.rotation(deg) > DEGREES);
-  }
-  else if(dir == 'l') {
-    while(fabs(Inertial1.rotation(deg))<DEGREES)
-    {
-      AllLeft.spin(reverse, speed, pct);
-      AllRight.spin(forward, speed, pct);
-    }
-        do{
-      AllLeft.spin(forward, 3, pct);
-      AllRight.spin(reverse, 3, pct);
-    }while(fabs(Inertial1.rotation(deg))>DEGREES);
-  }
-  AllLeft.stop(hold);
-  AllRight.stop(hold);
-}
-
 /*-----
 /////////////////////
 
@@ -267,12 +294,11 @@ SCORING
 //////////
 // AUTONOMOUS FUNCTION FOR INTAKE (with time input)
 ///////////
-void IntakeSpitAutoTime(int mTime, int speedPct, int timeout) {
+void IntakeSpitAutoTime(int mTime, int speedPct) {
   // SetTimeout(timeout);
 
-  // intake.setVelocity(speedPct, pct);
+  intake.spinFor(reverse, mTime, msec, speedPct, velocityUnits::pct);
 
-  intake.spinFor(reverse, mTime, msec);
   // SetTimeout(0);
 }
 
@@ -291,24 +317,23 @@ void IntakeSpitAuto(float turnDegree, int speedPct, int timeout) {
 //////////
 // AUTONOMOUS INTAKE FUNCTION TO INTAKE WHILE THERE IS NO DISK IN THE INTAKE
 ///////////
-void StoreDisk(int timeout) {
+void StoreDisk(int timeout, bool storeInCatapult) {
   SetTimeout(timeout);
 
   // while there is no disk fully in the intake...
   while (!diskInIntake()) 
   {
-    intake.spin(reverse, 20, pct);
+    intake.spin(reverse, 30, pct);
   }
 
-  intake.stop();
+  // if the user wants to store the disk in the catapult instead of the intake...
+  if (storeInCatapult) 
+  {
+    intake.spin(reverse, 70, pct);    // raise the speed to put in the catapult
+    wait(1500, msec);     // keep spinning until the disk is fully in the catapult
+  }
 
-  // wait(200, msec);
-
-  // if (diskInIntake()) {
-  //   intake.rotateFor(forward, 100, deg, false);
-  // }
-  
-
+  intake.stop();        // stop the intake
   SetTimeout(0);
 }
 
