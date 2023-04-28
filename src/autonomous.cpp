@@ -376,7 +376,7 @@ bool catapultWindAuton = true;
 void windCatapultAuton() {
   do {
     thrower.spin(reverse, 100, pct);
-  } while (catapultLimit.pressing());
+  } while (!catapultLimit.pressing());
 
   thrower.stop();
 }
