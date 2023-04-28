@@ -1,6 +1,7 @@
 #ifndef ROBOT_FUNCTIONS
 #define ROBOT_FUNCTIONS
 
+void changeIntakeSpeed();
 void intakeToggle();
 void reverseIntake();
 

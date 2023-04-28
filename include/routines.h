@@ -1,12 +1,12 @@
 #ifndef ROUTINES
 #define ROUTINES
 
-void Routine1Auton();
-void Routine2Auton();
-void Routine3Auton();
+void Routine1Auton(vex::color desiredColor);
+void Routine2Auton(vex::color desiredColor);
+void Routine3Auton(vex::color desiredColor);
 
-void Routine1Skills();
-void Routine2Skills();
+void Routine1Skills(vex::color desiredColor);
+void Routine2Skills(vex::color desiredColor);
 
 void moveinBox();
 void spinRoller();
