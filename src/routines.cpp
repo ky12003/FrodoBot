@@ -39,7 +39,6 @@ void Routine1Auton(vex::color desiredColor) {
   moveForwardPID(80);                 // move towards basket to shoot
   waitUntil(pidDone);                 // wait until pid completes
   wait(300, msec);                    // buffer
-  controller1.rumble(".");
   shootAllDisks();                    // shoot disks into low goal
   wait(300, msec);                    // buffer
 
